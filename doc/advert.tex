@@ -1,0 +1,57 @@
+\subsection*{Advertisement} 
+\begin{figure}[!hbp]
+  \includegraphics[scale=0.5]{fact_advertisement}
+\caption{\label{pic:f_adv}  Advertisement fact}
+\end{figure}
+
+\begin{figure}[!hbp]
+    \includegraphics[scale=0.5]{schema_snowflake_advertisement}
+\caption{\label{pic:sn_adv} Snowflake schema - Advertisement}
+\end{figure}
+
+\begin{figure}[!hbp]
+    \includegraphics[scale=0.5]{schema_star_advertisement}
+\caption{\label{pic:st_adv} Star schema - Advertisement}
+\end{figure}
+
+%%\begin{figure}[!hbp]
+%%\caption{\label{t:f_adv}Advertisement fact table}
+Advertisement fact table\\
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+keyDate & keyCampaign & Revenue & Displays & Clicks\\
+\hline
+874 & 32 & 20000 & 432812 & 4221\\
+932 & 872 & 399 & 21322 & 213\\
+\hline
+\end{tabular}
+%%\end{figure}
+
+%%\begin{figure}[!hbp]
+%%\caption{\label{t:adv_date}Date dimension table}
+Date dimension table\\
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+keyDate & Date & Month & Quarter & Year\\
+\hline
+874 & 23 & 1 & 1 & 2008\\
+932 & 5 & 5 & 2 & 2006\\
+\hline
+\end{tabular}
+%%\end{figure}
+
+%%\begin{figure}[!hbp]
+%%\caption{\label{t:adv_camp}Campaign dimension table}
+Campaign dimension table\\
+\begin{tabular}{|c|c|c|c|}
+\hline
+keyCampaign & Name & Advertiser Name & Advertiser Category\\
+\hline
+32 & 2012 Volkswagen CC Ad & Volkswagen & Big Fish\\
+872 & Free Lunch at Mensa & Bolzano University & Small Fish\\
+\hline
+\end{tabular}
+
+%%\end{figure}
+% prints all figures
+\clearpage

@@ -1,6 +1,0 @@
-describe the measure
-one paragraph per task
-you want to maximize to clicks with revenue, but we can not maximize the campaign and revenue from it
-think of offer this add to people who read the
-
-describe which measures and dimensions can be aggregated together

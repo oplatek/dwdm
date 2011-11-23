@@ -1,0 +1,48 @@
+\section{Business queries} % (fold)
+\label{sub:Business queries}
+
+\subsection*{Task} % (fold)
+\label{sub:name}
+For the designed data warehouse write 20 aggregation queries in both natural language and SQL. Include the results (if the resulting data amount is big, include a sample).
+% subsection Task (end)
+
+\subsection*{Subscription queries} % (fold)
+\label{sub:Subscription business queries}
+\begin{enumerate}
+  \item Revenue from subscriptions by year.
+  \item Most popular period by year.
+  \item Most revenue and quantity from subscriptions by country.
+  \item How much we would earn without applying discounts on subscription by period type  by year.
+  \item Number of sales on different holidays in 2010 by period in United States.
+  \item The cities with biggest revenue by country.
+  \item Revenue by month and by  state in United States together with average revenue by states in United States in the same month
+\end{enumerate}
+% subsection Subscription queries (end)
+
+\subsection*{Article queries} % (fold)
+\label{sub:Article  queries}
+\begin{enumerate}
+\item    Top 10 read articles and author for every week in year 2011.
+\item    Hours of the day when most articles are read, grouped by category in year 2010 + average number of articles read for the hour in year 2010
+\item    Most read of articles by the day of week group by week together with avg num of articles read on this day of week
+\item    Most commented authors group by category
+\item    Each author’s most read articles with num of reads together with avg num of reads for this author’ s department and each author in this avg query has to have at least 20 articles and all these articles must be at least 1 month old
+\item    The articles with  \#comments/ \#reads higher and average \#comments/\#reads by category having more reads  than 20000 and which are older than month group by category
+\item    Comparing number of reads/shares/comments tagged with positive and negative group by year with ratio. Also the same with short/medium/long
+\item    Most popular tags:  Top 100 tags which has the highest value of number of articles with tags divided with number with the tags.
+\end{enumerate}
+% subsection Article  queries (end)
+
+\subsection*{Advertisement  queries} % (fold)
+\label{sub:Advertisement queries}
+
+\begin{enumerate}
+\item    Revenue by year together with average revenue in all years together with revenue in year and together with next year
+\item    CPM(Clicks divided by displays) for top 10 advertisers by revenue together with avg CPM for advertisers category having the advertiser at least 5 campaigns
+\item    Revenue by advertiser category with revenue by limits 10k/20k/30/k
+\item    The Campaigns which lasted more then 5 month with revenue bigger than 10000 per month
+\item    Most popular campaigns by category and year together with avg CPM per month in this year for every month
+\end{enumerate}
+% section Business queries (end)
+
+% section Advertisement business queries (end)
