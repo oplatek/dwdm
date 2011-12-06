@@ -1,10 +1,12 @@
-﻿-- DROP SCHEMA IF EXISTS advert CASCADE; 
--- oracle cannot drop schema without drop user priviliges -> schema is associeted with user according https://forums.oracle.com/forums/thread.jspa?threadID=505126
-CREATE SCHEMA advert;
+/* do not use schema -> we do not have user priviliges */
+/* create separate drop tables sql script */
+/* serial can not be used we have to create  
+    http://www.techonthenet.com/oracle/sequences.php */
+/* change text -> VARCHAR(CONSTANT) */
 
-CREATE TABLE advert.Date
+CREATE TABLE advert_Date
 (
-   keyDate serial NOT NULL,
+   keyDate integer NOT NULL,
    Day smallint NOT NULL,
    Month smallint NOT NULL,
    Quarter smallint NOT NULL,
@@ -12,19 +14,19 @@ CREATE TABLE advert.Date
    PRIMARY KEY (keyDate)
 );
 
-CREATE TABLE advert.Campaign
+CREATE TABLE advert_Campaign
 (
-   keyCampaign serial NOT NULL,
-   Name text NOT NULL,
-   AdvertiserName text NOT NULL,
-   AdvertiserCategory text NOT NULL,
+   keyCampaign integer NOT NULL,
+   Name VARCHAR(256) NOT NULL,
+   AdvertiserName VARCHAR(256) NOT NULL,
+   AdvertiserCategory VARCHAR(256) NOT NULL,
    PRIMARY KEY (keyCampaign)
 );
 
-CREATE TABLE advert.Advertisement
+CREATE TABLE advert_Advertisement
 (
-   keyDate integer REFERENCES advert.Date(keyDate) NOT NULL,
-   keyCampaign integer REFERENCES advert.Campaign(keyCampaign) NOT NULL,
+   keyDate integer REFERENCES advert_Date(keyDate) NOT NULL,
+   keyCampaign integer REFERENCES advert_Campaign(keyCampaign) NOT NULL,
    Revenue numeric(20,6) NOT NULL,
    Displays integer NOT NULL,
    Clicks integer NOT NULL,
