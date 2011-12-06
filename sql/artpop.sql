@@ -18,7 +18,7 @@ CREATE TABLE artpop_Article
    Author VARCHAR(256) NOT NULL,
    AuthorExperience VARCHAR(256) NOT NULL,
    AuthorDepartment VARCHAR(256) NOT NULL,
-   PublicationdDay smallint NOT NULL,
+   PublicationDay smallint NOT NULL,
    PublicationMonth smallint NOT NULL,
    PublicationYear smallint NOT NULL,
    PRIMARY KEY (keyArticle)
