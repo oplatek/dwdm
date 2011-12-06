@@ -1,43 +1,41 @@
-﻿DROP SCHEMA IF EXISTS sub CASCADE;
-CREATE SCHEMA sub;
-
-CREATE TABLE sub.Date
+﻿
+CREATE TABLE sub_Date
 (
-   keyDate serial NOT NULL,
+   keyDate integer NOT NULL,
    Day smallint NOT NULL,
    Month smallint NOT NULL,
    Year smallint NOT NULL,
    Week smallint NOT NULL,
-   Thanksgiving boolean NOT NULL,
-   Halloween boolean NOT NULL,
-   Easter boolean NOT NULL,
-   Christmas boolean NOT NULL,
+   Thanksgiving CHAR(1) CHECK (Thanksgiving IN ( 'Y', 'N' )),
+   Halloween CHAR(1) CHECK (Halloween IN ( 'Y', 'N' )),
+   Easter CHAR(1) CHECK (Easter IN ( 'Y', 'N' )),
+   Christmas CHAR(1) CHECK (Christmas IN ( 'Y', 'N' )),
    PRIMARY KEY (keyDate)
 );
 
-CREATE TABLE sub.Location
+CREATE TABLE sub_Location
 (
-   keyLocation serial NOT NULL,
-   City text NOT NULL,
-   State text NOT NULL,
-   Country text NOT NULL,
-   Zone text NOT NULL,
-   Continent text NOT NULL,
+   keyLocation integer NOT NULL,
+   City VARCHAR(256) NOT NULL,
+   State VARCHAR(256) NOT NULL,
+   Country VARCHAR(256) NOT NULL,
+   Zone VARCHAR(256) NOT NULL,
+   Continent VARCHAR(256) NOT NULL,
    PRIMARY KEY (keyLocation)
 );
 
-CREATE TABLE sub.Period
+CREATE TABLE sub_Period
 (
-  keyPeriod serial NOT NULL,
-  Name text NOT NULL,
+  keyPeriod integer NOT NULL,
+  Name VARCHAR(256) NOT NULL,
   PRIMARY KEY (keyPeriod)
 );
 
-CREATE TABLE sub.Subscription
+CREATE TABLE sub_Subscription
 (
-   keyDate integer REFERENCES sub.Date(keyDate) NOT NULL,
-   keyLocation integer REFERENCES sub.Location(keyLocation) NOT NULL,
-   keyPeriod integer REFERENCES sub.Period(keyPeriod) NOT NULL,
+   keyDate integer REFERENCES sub_Date(keyDate) NOT NULL,
+   keyLocation integer REFERENCES sub_Location(keyLocation) NOT NULL,
+   keyPeriod integer REFERENCES sub_Period(keyPeriod) NOT NULL,
    Quantity smallint NOT NULL,
    Price numeric(5,2) NOT NULL,
    Discount numeric(6,5) NOT NULL,
