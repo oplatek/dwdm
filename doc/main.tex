@@ -2,29 +2,68 @@
 %settings are located in begin_settins.tex and end_settings.tex files
 %do not remove!
 \input{begin_settings}
+        \input{todo} % comment for final version
+        \input{intro}
 
-\input{intro}
-\input{evaluation}
-\input{todo}
+\chapter{Milestone - Data warehouse design} \label{cha:ml1}
+    \section{Content of Milestone~\ref{cha:ml1}} 
+        \label{sec:ml1_content}
+    \input{ml1_content}
+    \section{Business Domain} \label{sec:}
+    \input{ml1_domain}
+        \subsection{Data Warehouse Objectives} \label{sub:ml1_objectives}
+        \input{ml1_objectives}
+        \subsection{Business Processes} \label{sub:ml1_processes}
+        \input{ml1_processes}
+        \subsection{Process Granularity} \label{sub:ml1_granularity}
+        \input{ml1_granularity} 
+    % section Business Domain (end)
 
-\chapwithtoc{Milestone 1} \label{sec:milestone1}
+    \section{Conceptual Design of Data Warehouse}
+            \label{sec:ml1_design}  
+        \subsection{Facts} \label{sub:ml1_facts}
+        \input{ml1_facts}
+        \subsection{Fact Measures} \label{sub:ml1_measure}
+        \input{ml1_measures}
+        \subsection{Attributes and Hierarchies} \label{sub:ml1_attributes}
+        \input{ml1_attributes}
+        \subsection{Conceptual problems} \label{sub:ml1_problems}
+        \input{ml1_problems}
+    % section Conceptual Design of Data Warehouse (end)
 
-  \input{dw_description}
+    \section{Logical design} 
+            \label{sec:Logical design}
+        \subsection{Star schemas} \label{sub:ml1_star}
+        \input{ml1_star}
+        \subsection{Snowflake schemas} \label{sub:ml1_snowflake}
+        \input{ml1_snowflake}
+        \subsection{Our Choice} \label{sub:ml1_choice}
+        \input{ml1_choice}
+    % section Logical design (end)
 
-  \section{Schemas and sample data}\label{sub:schemas} % (fold) 
-  \input{article}
-  \input{advert}
-  \input{subscr}
-  %section Schemas and sample data (end)
+    \section{SQL Implementation} % (fold)
+    \label{sec:implementation}
+    \input{ml1_implementation}
 
-  \input{discussion}
 % chapter Milestone 1 (end)
 
-\chapwithtoc{Milestone 2} \label{sec:milestone2}
+\chapter{Milestone - Data warehouse querying} \label{cha:ml2}
+    \section{Content of Milestone~\ref{cha:ml2}} 
+        \label{sec:ml2_content}
+    \input{ml2_content}
 
-  \input{bus_queries}
+    \section{Business queries} \label{sec:Business queries}
+    \input{ml2_queries}
 
 % chapter Milestone 2 (end)
+
+\chapter{Milestone 3} \label{cha:ml3}
+    \section{Content of Milestone~\ref{cha:ml3}} 
+        \label{sec:ml3_content}
+    \input{ml3_content}
+
+
+% chapter Milestone 3 (end)
 
 %do not remove!
 \input{end_settings}
