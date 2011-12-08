@@ -1,2 +1,0 @@
-#!/bin/bash
-for I in `ls images/*.dia`; do dia -t eps -e `echo "$I"|sed s:dia:eps:` $I; done

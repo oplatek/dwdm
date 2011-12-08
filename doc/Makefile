@@ -7,21 +7,21 @@ all: ${NAME}.dvi
 #	dvipdfm -o $@ -p a4 -r 600 $<
 pdf: ${NAME}.pdf
 
-${NAME}.pdf: ${NAME}.ps
+${NAME}.pdf: ${NAME}.ps dia
 	ps2pdf $< $@
 
 ${NAME}.ps: ${NAME}.dvi
 	dvips -o $@ -D600 -t a4 $<
 
 # LaTeX je potreba spustit dvakrat, aby spravne spocital odkazy
-${NAME}.dvi: ${NAME}.tex $(wildcard *.tex) dia
+${NAME}.dvi: ${NAME}.tex $(wildcard *.tex) 
 	latex $<
 	latex -src $<
 
-#latex prijima pouze eps, je tedy potrebovat zkonvertovat obrazky
-
 # TODO not working properly calling if not necessary
+#latex prijima pouze eps, je tedy potrebovat zkonvertovat obrazky
 dia: $(wildcard images/*.dia)
-# 	dia -t eps -e `echo "$<"|sed s:dia:eps:` $<
+	images/dia2eps ./images
+
 clean:
 	rm -f *.log  *.dvi *.aux *.toc *.lof *.out ${NAME}.ps ${NAME}.pdf
