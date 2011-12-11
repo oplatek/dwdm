@@ -1,14 +1,47 @@
+/* 1. TODO DATA  country only Canada*/
+SELECT DISTINCT l.Country, l.Continent FROM sub_Location l;
+/* 2. TODO DATA only NOT holidays */
+SELECT DISTINCT d.Thanksgiving, d.Christmas, d.Easter FROM sub_Date d;
 
-/*
-Subscription queries
- 1. [Ondra]Revenue from subscriptions by year.
+
+/* Subscription queries */
+  /* 1. [Ondra]Revenue from subscriptions by year. */
+
+SELECT SUM(ss.price), sd.YEAR FROM 
+      sub_Date sd INNER JOIN sub_Subscription ss ON (sd.keyDate = ss.keyDate)  
+      GROUP BY sd.YEAR ORDER BY sd.YEAR;
+
+  /*
  2. Most popular period by year.
- 3. [Ondra]Most revenue and quantity from subscriptions by country.
+ 3. [Ondra]Most revenue and quantity from subscriptions by country. 
+     todo - do not undestand
+     todo - return only Canada
+ */
+ 
+SELECT SUM(ss.price), SUM(ss.Quantity), sl.Country FROM 
+       sub_Location sl INNER JOIN sub_Subscription ss ON (sl.keyLocation = ss.keyLocation)  
+      GROUP BY sl.Country;
+    
+  
+  /*
  4. How much we would earn without applying discounts on subscription by period type by year.
  5. [Ondra]Number of sales on different holidays in 2010 by period in United States.
+ */
+ SELECT SUM(ss.Quantity) FROM sub_Date sd, sub_Location sl, sub_Subscription ss  
+ WHERE sd.keyDate = ss.keyDate AND sl.keyLocation = ss.keyLocation
+ /* TODO WE DO NOT HAVE ANY HOLIDAYS!!! AND sd.Thanksgiving = 'Y' OR sd.Halloween = 'Y' OR sd.Easter = 'Y' OR sd.Christmas = 'Y'*/  
+ AND sd.Year = 2010 AND sl.Country='Canada'; /*todo change to United States*/
+ 
+ /*
  6. The cities with biggest revenue by country.
  7. [Ondra]Revenue by month and by state in United States together with average revenue by states in United States in the same month
 */
+SELECT SUM(ss.Price) AS "state revenue", AVG(groupedstates_revenu) AS "average revenue across states" 
+FROM sub_Date, sub_Location, sub_Subscription
+WHERE sd.keyDate = ss.keyDate AND sl.keyLocation = ss.keyLocation
+AND sl.Country='USA' /* todo add usa */
+GROUP BY GROUPING SETS((sl.State,sl.Country),sd.Month);
+
 
 /*
 Article queries
