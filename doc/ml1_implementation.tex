@@ -1,0 +1,30 @@
+
+Our data was generated partially randomly and partially randomly chosen from public databases.
+Firstly, we created the populating scripts for PostgresSQL 9.1. Lately, we decided to migrate
+our database to Oracle TODO VERSION IN SCHOOL, because Postgres does not support data mining extensions.
+We had to modify the populating scripts to fit Oracle syntax and also subdivide them,
+because Oracle does not support some commands with our permissions, e.g. "CREATE SCHEMA" command.
+
+We divided generated data into several SQL scripts which creates tables, populates tables, and delete tables.
+We provide init.sh file. It allows to populate database, see Figure~\ref{l:ml1_init}, and also deleting the tables, see Figure~\ref{l:ml1_drop}.
+\begin{figure}[!hbp]
+\begin{lstlisting}[language=bash]
+$ cd init
+# comment: init connects to database granted to us from school
+# comment: for more information check the script itself
+$ ./init.sh init login password
+# it will take quite about 4 hours to populate the data
+\end{lstlisting}
+\caption{Populating data warehouse using  init.sh script} \label{l:ml1_init}
+\end{figure}
+
+\begin{figure}[!hbp]
+\begin{lstlisting}[language=bash]
+$ cd init
+# comment: droping the table/ removing the data warehouse still from init directory
+$ ./init.sh drop login password
+\end{lstlisting}
+\caption{Removing data warehouse using  init.sh script} \label{l:ml1_drop}
+\end{figure}
+
+For more details about SQL scripts, the init.sh script or the script for generating data view the source code of the scripts, it should be self explenatory. In enclosed README.txt we list all containing scripts and the usage again.

@@ -1,0 +1,9 @@
+
+{\bf Advertisement} fact has measures {\it Revenue},{\it Displays},{\it Clicks}. All 3 measures are additive of an integer type. All three measures could be combined to compute secondary statistic, e.g. Click rate $Clicks / Displays$. 
+
+{\bf Subscription} is measured by {\it Price}, {\it Discount} and {\it Quantity}. The measures simply reflects the act of subscribing per one order. {\it Quantity} is number of subscriptions in one order. {\it Price} and {\it Quantity} are additive measures. {\it Discount} is proportional e.g. 0.1 meaning $10\%$ discount. It means it is not additive, however an average discount per order makes sense.
+
+{\bf Article popularity} could be measured by {\it Number of reads}, {\it Number of shares} and {\it Number of comments}.
+All three measures are additive.
+
+All additive measures in all three facts could be sum up allong its hierachies for additional attributs. The average could be counted using {\it SUM} and {\it COUNT} on corresponding level, but realise that average of averages from disjoint subsets is not average from a the whole set.
