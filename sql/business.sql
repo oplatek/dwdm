@@ -1,7 +1,5 @@
 /* 1. TODO DATA  country only Canada*/
 SELECT DISTINCT l.Country, l.Continent FROM sub_Location l;
-/* 2. TODO DATA only NOT holidays */
-SELECT DISTINCT d.Thanksgiving, d.Christmas, d.Easter FROM sub_Date d;
 
 
 /* Subscription queries */
@@ -29,7 +27,7 @@ SELECT SUM(ss.price), SUM(ss.Quantity), sl.Country FROM
  */
  SELECT SUM(ss.Quantity) FROM sub_Date sd, sub_Location sl, sub_Subscription ss  
  WHERE sd.keyDate = ss.keyDate AND sl.keyLocation = ss.keyLocation
- /* TODO WE DO NOT HAVE ANY HOLIDAYS!!! AND sd.Thanksgiving = 'Y' OR sd.Halloween = 'Y' OR sd.Easter = 'Y' OR sd.Christmas = 'Y'*/  
+ AND sd.Thanksgiving = 'Y' OR sd.Halloween = 'Y' OR sd.Easter = 'Y' OR sd.Christmas = 'Y'  
  AND sd.Year = 2010 AND sl.Country='Canada'; /*todo change to United States*/
  
  /*
