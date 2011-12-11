@@ -1,9 +1,8 @@
-%iso-8859-2 encoding
-%settings are located in begin_settins.tex and end_settings.tex files
-%do not remove!
+%settings are located in begin_settins.tex and end_settings.tex files -> do not remove the files!
 \input{begin_settings}
-        \input{todo} % comment for final version
-        \input{intro}
+
+\input{todo} % comment for final version
+\input{intro} % title page, content 
 
 \chapter{Milestone - Data warehouse design} \label{cha:ml1}
     \section{Content of Milestone~\ref{cha:ml1}} 
@@ -23,7 +22,7 @@
             \label{sec:ml1_design}  
         \subsection{Facts} \label{sub:ml1_facts}
         \input{ml1_facts}
-        \subsection{Fact Measures} \label{sub:ml1_measure}
+        \subsection{Fact Measures} \label{sub:ml1_measures}
         \input{ml1_measures}
         \subsection{Attributes and Hierarchies} \label{sub:ml1_attributes}
         \input{ml1_attributes}
@@ -32,13 +31,15 @@
     % section Conceptual Design of Data Warehouse (end)
 
     \section{Logical design} 
-            \label{sec:logical}
+            \label{sec:ml1_logical}
         \subsection{Star schemas} \label{sub:ml1_star}
         \input{ml1_star}
         \subsection{Snowflake schemas} \label{sub:ml1_snowflake}
         \input{ml1_snowflake}
-        \subsection{Our Choice} \label{sub:ml1_choice}
+        \subsection{Choice between schemas} \label{sub:ml1_choice}
         \input{ml1_choice}
+        \subsection{Example data} \label{sub:ml1_example}
+        \input{ml1_example}
     % section Logical design (end)
 
     \section{SQL Implementation} % (fold)

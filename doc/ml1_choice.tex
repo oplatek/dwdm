@@ -1,0 +1,7 @@
+Due to the fact that most of attributes hierarchies are static and narrow, in sense of branching and also simple domains, the tables in star schema do not cover too much space and allow better performance for data warehouse queries. In other words, the low normality of tables does not Affect the space requirements too badly because the numbers of possible values in hierarchies are relatively low.
+
+On the other hand, the star schema allows us process aggregation function more effectively.
+The aggregation functions together with joins are the key operations for data warehouse and
+the star schema implements them effectively, so we decided to follow star schema.
+
+The only exception, which does not fit to our star schema, is the Tag attribute from the fact Article popularity. We create a separate table for describing n to n relation between Tags and Articles. The table is very huge and is nonsense  to make the table wider by another columns as it is displayed in star schema design. Instead we created separated table just for Tag id and Article id.

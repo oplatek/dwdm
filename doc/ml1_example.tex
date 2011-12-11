@@ -1,0 +1,157 @@
+In tables below you see sample date for a star schema introduced in~Subsection~\ref{sub:ml1_star}. As we mention in  Subsection~\ref{sub:ml1_choice} we did not used in our implementation exactly the star schema, but we separated {\it tags} attribute to another table. So notice that in our implementation we added a {\it keyTag} column in Table~\ref{t:f_artpop}, remove column {\it Tags} in  Table~\ref{t:art_dim_table} and we created {\bf separate table {\it Tags}}.
+\begin{figure}[!hbp]
+\caption{\label{t:f_adv}Advertisement fact table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+keyDate & keyCampaign & Revenue & Displays & Clicks\\
+\hline
+\hline
+874 & 32 & 20000 & 432812 & 4221\\
+932 & 872 & 399 & 21322 & 213\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+\begin{figure}[!hbp]
+\caption{\label{t:adv_date}Advertisement Date dimension table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+keyDate & Date & Month & Quarter & Year\\
+\hline
+\hline
+874 & 23 & 1 & 1 & 2008\\
+932 & 5 & 5 & 2 & 2006\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+\begin{figure}[!hbp]
+\caption{\label{t:adv_camp}Advertisement Campaign dimension table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+keyCampaign & Name & Advertiser Name & Advertiser Category\\
+\hline
+\hline
+32 & 2012 Volkswagen CC Ad & Volkswagen & Big Fish\\
+872 & Free Lunch at Mensa & Bolzano University & Small Fish\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+\begin{figure}[!hbp]
+\caption{\label{t:f_sub}Subscription fact table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+keyDate & keyLocation & keyPeriod & Quantity & Price & Discount\\
+\hline
+\hline
+423 & 2311 & 1223 & 2 & 100.58 & 0.1\\
+43 & 88 & 8898 & 10 & 920.3 & 0.1\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+\begin{figure}[!hbp]
+\caption{\label{t:sub_date}Subscription date dimension table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|p{1.3cm}|p{1.2cm}|p{1.3cm}|p{1cm}|}
+\hline 
+keyDate &Date&Month&Quarter& Year & Week & Thanks- giving & Eastern & Christ- mas & Hallo- ween\\
+\hline
+\hline
+423 & 31 & 10 & 4 & 2011 & 1 & 0 & 0 & 0 & 1\\
+43 & 24 & 12 & 4 & 2005 & 6 & 0 & 0 & 1 & 0\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[!hbp]
+\caption{\label{t:sub_loc|}Subscription location dimension table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+keyLocation & City & State & Country & Zone & Continent\\
+\hline
+\hline
+2311 & New York & New York & United States & US and Canada & North America\\
+88 & Bolzano & South Tyrol & Italy & Southern Europe & Europe\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+\begin{figure}[!hbp]
+\caption{\label{t:sub_per}Subscription period dimension table}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+keyPeriod & Name\\
+\hline
+\hline
+1223 & Month\\
+8898 & Annual\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+\begin{figure}[!hbp]
+\caption{\label{t:f_artpop}Article Popularity fact table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+keyDate & keyArticle & Reads & Shares & Comments\\
+\hline
+\hline
+2011020117 & 1000 & 212 & 20 & 5\\
+2011020118 & 1000 & 53 & 2 & 4\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+\begin{figure}[!hbp]
+\caption{\label{t:art_date}Article Popularity Date dimension table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+keyDate  & Hour & Date & Month & Year\\
+\hline
+\hline
+2011020117 & 17 & 02 & 11 & 2011\\
+\hline
+2011020118 & 18 & 02 & 11 & 2011\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[!hbp]
+\caption{\label{t:art_dim_table}Article Popularity dimension table }
+\begin{center}
+\begin{tabular}{|p{1cm}|p{1cm}|p{1cm}|p{1.25cm}|p{1.25cm}|p{1.25cm}|p{1.35cm}|p{1.3cm}|p{0.7cm}|p{1.05cm}|p{0.9cm}|}
+\hline
+key Article & Title & Tags & Author & Author Exp. & Author Dept. & Sub category & Cate- gory & Pub. Day & Pub. Month & Pub. Year\\
+\hline
+\hline
+1000 & Article  & rude funny & John Smith & Junior Reporter & Enter- tainment & Fashion & Life and Style & 02 & 11 & 2011\\
+\hline
+9999 & Wake the economy & serious actual&Jane Doe & Senior Reporter & Finance & Earnings & Business & 03 & 11 & 2011\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+
+%force to print all figures
+\clearpage

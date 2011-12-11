@@ -1,7 +1,11 @@
-Our company has had multiple data sources (paper receipts, paper journals, text files, proprietary binary file databases and lately SQL databases) for the print newspaper over the years which have been integrated into one relational database. The online edition was designed separately and has its own databases. Both databases store customer data differently which makes it hard to aggregate statistics from both editions. Also, the database for the printed edition was built additively and contains data inconsistencies. The data warehouse would allow to combine personalized knowledge of the online edition readers with a lot of additional historical data from the printed edition.
+ 
+Our company has had multiple data sources (paper receipts, paper journals, text files, proprietary binary file databases and lately SQL databases) for the print newspaper over the years which have been integrated into one relational database. 
+The~online edition was designed separately and has its own databases. 
+
+Both databases store customer data differently which makes it hard to aggregate statistics from both editions. Also, the database for the printed edition was built additively and contains data inconsistencies. The data warehouse would allow to combine personalized knowledge of the online edition readers with a lot of additional historical data from the printed edition.
 
 
-WSJ is the largest newspaper in the United States by circulation and has more than 400,000 online paid subscriptions. As such, the amount of data accumulated over the years is huge and was not designed to be stored for efficient analysis. As a result, it’s very inefficient to extract useful information as the business queries would take a long time when run on production databases.
+WSJ is the largest newspaper in the United States by circulation and has more than 400,000 online paid subscriptions. As such, the amount of data accumulated over the years is huge and was not designed to be stored for efficient analysis. As a result, it's very inefficient to extract useful information as the business queries would take a long time when run on production databases.
 
 The management of Journal understands, that the Web not only is a thread to printed newspaper, but also could be a huge market and source of information. As goal for new decade the Journal company is interested among others in following topics:
 \begin{itemize}
@@ -13,5 +17,5 @@ The management of Journal understands, that the Web not only is a thread to prin
     \item When we should advertise the Journal to subscribers?
 \end{itemize}
 
-
+The WSJ decided to start building data warehouse based on the database containing new online data. Secondly, the WSJ woul like to add the~historical data to the~data warehouse. This scenario allows early result for current relevant data and it also allows incorporating historical data step by step in future.
 

@@ -1,3 +1,32 @@
+\footnote{In Subsection~\ref{sub:ml1_granularity} we mark the finest granularity by printing it in bold} 
 
-Since the main source of revenue is subscription sales, it should be possible to break them down by location and date. Highest granularity for location should be the city. Also, since it’s a global newspaper, countries should be grouped by regions, continents and arbitrary zones. It’s not important to know at exactly what time a subscription was purchased, but it is useful to see if it was on a holiday, so having the date as the highest granularity is sufficient. This also applies to ad sales revenue dates.
+\subsection*{Selling subscriptions} 
+We break down the subscriptions by location and date in order to see how successful we are during the time on different places. It is worth to mention that subscriptions are the main source of our income. 
+
+Highest granularity for location should be the {\bf city}, because it is the ideal unit for describing mass behaviour.  The habits and traditions  which influences the mass behaviour are best captured on the level of cities. 
+
+Since it's a global newspaper, countries should be grouped by regions, continents and arbitrary zones based on detail information our newspaper has about the specified region.
+
+It's not important to know at exactly what time a subscription was purchased, but the date is relevant. 
+In order to differentiate holidays, day of week we have chosen {\bf date} as our highest granularity. 
+
+\subsection*{Advertising} 
+The process of advertising is getting more important
+and we want to examine advertisements according {\bf Campaigns}and date {\bf Date}.  
+
+\subsection*{Popularity of article content} 
+Since we have started with online content, we are interested which factors are crucial for popularity of our article.
+
+We decided to measure the popularity of each article every {\bf hour}, because the reading habits of our readers probably depends on the time of a day. On the other hand, we cannot afford finer granularity because we have to store the data about all the articles.
+
+The article popularity is probably heavily dependent on the quality and topic of the article. 
+This fact we reflect by choosing the articles in finest details
+according
+\begin{itemize}
+    \item {\bf Publication date}
+    \item {\bf Subcategory of article}
+    \item tags - one word description of unlimited domain (no hierarchy)
+    \item {\bf Author}
+\end{itemize}
+
 

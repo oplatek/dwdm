@@ -1,0 +1,6 @@
+At first, we had difficulty identifying facts, but as we discussed business processes and made up sample business queries, we managed to identify the facts.
+
+Secondly, we looked at facts more from a relational point of view. We did not consider evolution
+of data in time, so we thought about updates in our data warehouse. Especially difficult for us was to avoid updates in facts about articles. We had originally designed the fact that had reflected only actual state. Instead of adding new information and keeping historical data, we had though about updating values in data warehouse. It was clearly wrong solution.
+
+Finally, we managed to figure out how to designed the fact and keep the measures reads, shares and comments and also we know that the tables are sensible large.
