@@ -34,8 +34,9 @@ foreach ($tags as $n => $t) {
 }
 echo "\n\n";
 
-$startDate = strtotime('-1 month'); // affects the amount of data generated, examples: -1 year, -10 years etc.
-$endDate = time();
+$startDate = strtotime('-32 month'); // affects the amount of data generated, examples: -1 year, -10 years etc.
+/*$startdate = strtotime('-1 year'); // affects the amount of data generated, examples: -1 year, -10 years etc.*/
+$endDate = strtotime('-2 month'); // todo  change back to time();
 
 for ($date = $startDate; $date <= $endDate; $date += 86400) {
 	for ($h = 0; $h <= 23; $h++) {
@@ -53,8 +54,8 @@ for ($date = $startDate; $date <= $endDate; $date += 86400) {
 echo "\n\n";
 
 // affects the amount of data generated
-$maxArticlesPerDay = 150;
-$minArticlesPerDay = 50;
+$maxArticlesPerDay = 15;
+$minArticlesPerDay = 5;
 
 // doesn't affect the amount of data generated
 $maxReads = 20000;

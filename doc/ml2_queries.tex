@@ -69,6 +69,7 @@ For the designed data warehouse write 20 aggregation queries in both natural lan
 	order by d.year, period
   \end{lstlisting}
   \item Revenue by month and by state in Canada in 2010 together with average revenue by states in Canada in the same month.
+  \begin{lstlisting}[language=sql] 
 	select l.state, d.month, sum(price * (1-discount) * quantity) revenue,
 	avg(sum(price * (1-discount) * quantity)) over (partition by month) avg_rev /* avg_revenue_in_this_month_across_all_states */
 	from oplatek.sub_subscription s 
@@ -77,6 +78,7 @@ For the designed data warehouse write 20 aggregation queries in both natural lan
 	where length(l.state) = 2
 	group by l.state, d.month
 	order by state asc, month asc
+  \end{lstlisting}
 \end{enumerate}
 % subsection Subscription queries (end)
 
@@ -98,11 +100,27 @@ For the designed data warehouse write 20 aggregation queries in both natural lan
 \label{sub:Advertisement queries}
 
 \begin{enumerate}
-\item    Revenue by year together with average revenue in all years together with revenue in year and together with next year
+\item    Revenue by year together with average revenue in all years together with revenue in this year and together with next year
+  \begin{lstlisting}[language=sql] 
+select ad.Year, sum(aa.revenue), avg(sum(aa.revenue)) over () AS total_avg 
+      ,sum(sum(aa.revenue)) over (order by ad.year rows 1 preceding) AS sum_last_2_years
+      from   
+advert_advertisement aa
+join advert_date ad on aa.keydate = ad.keydate
+group by ad.YEAR;
+  \end{lstlisting}
 \item    CPM(Clicks divided by displays) for top 10 advertisers by revenue together with avg CPM for advertisers category having the advertiser at least 5 campaigns
+  \begin{lstlisting}[language=sql] 
+  \end{lstlisting}
 \item    Revenue by advertiser category with revenue by limits 10k/20k/30/k
+  \begin{lstlisting}[language=sql] 
+  \end{lstlisting}
 \item    The Campaigns which lasted more then 5 month with revenue bigger than 10000 per month
+  \begin{lstlisting}[language=sql] 
+  \end{lstlisting}
 \item    Most popular campaigns by category and year together with avg CPM per month in this year for every month
+  \begin{lstlisting}[language=sql] 
+  \end{lstlisting}
 \end{enumerate}
 % section Business queries (end)
 
