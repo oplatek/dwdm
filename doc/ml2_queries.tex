@@ -85,12 +85,70 @@ For the designed data warehouse write 20 aggregation queries in both natural lan
 \subsection*{Article queries} % (fold)
 \label{sub:Article  queries}
 \begin{enumerate}
-\item    Top 10 read articles and author for every week in year 2011.
-\item    Hours of the day when most articles are read, grouped by category in year 2010 + average number of articles read for the hour in year 2010
+\item    Top 10 read articles and their authors for every month in year 2011.
+\begin{lstlisting}[language=sql] 
+select * from (
+select d.month, a.keyarticle as id, a.title, a.author, sum(reads) reads, rank() over (partition by month order by sum(reads) desc) rank 
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle
+join oplatek.artpop_date d on f.keydate = d.keydate and d.year = 2010
+group by d.month, a.keyarticle, a.title, a.author
+order by month asc, reads desc
+) where rank <= 10
+\end{lstlisting}
+\item    Hours of the day when most articles are read grouped by category in year 2010 together with the average number of articles read during this hour in the same year.
+\begin{lstlisting}[language=sql] 
+select a.category, d.hour, sum(reads) reads, avg(sum(reads)) over (partition by hour) avg_reads 
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle
+join oplatek.artpop_date d on f.keydate = d.keydate and d.year = 2010
+group by a.category, d.hour
+order by a.category asc, d.hour asc
+\end{lstlisting}
 \item    Most read of articles by the day of week group by week together with avg num of articles read on this day of week
-\item    Most commented authors group by category
-\item    Each author’s most read articles with num of reads together with avg num of reads for this author’ s department and each author in this avg query has to have at least 20 articles and all these articles must be at least 1 month old
-\item    The articles with  \#comments/ \#reads higher and average \#comments/\#reads by category having more reads  than 20000 and which are older than month group by category
+\begin{lstlisting}[language=sql] 
+\end{lstlisting}
+\item    Top 5 authors in every category by comments on their articles.
+\begin{lstlisting}[language=sql] 
+select * from (
+select a.category, a.author, sum(comments) comments, rank() over (partition by a.category order by sum(comments) desc) rank 
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle
+group by a.category, a.author
+order by a.category asc, comments desc
+) where rank <= 5
+\end{lstlisting}
+\item    Each author's 5 most read articles with the number of total article reads together with the average number of article reads for this author's department and each author must have at least 20 articles published, all these articles must have been published before 2011 and total reads for each article must be above the average article read count for the author's department.
+\begin{lstlisting}[language=sql] 
+select *
+from (select a.author, 
+      rank() over (partition by a.author order by sum(reads) desc) rank,
+      a.keyarticle id, a.title,
+      sum(reads) reads, 
+      a.authordepartment department,
+      avg(sum(reads)) over (partition by a.authordepartment) deparment_reads,
+      count(a.keyarticle) over (partition by a.author) total_articles
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle
+where a.publicationyear < 2011
+group by a.author, a.authordepartment, a.keyarticle, a.title
+order by a.author, rank asc)
+where rank <= 5 and reads > deparment_reads and total_articles >= 20
+\end{lstlisting}
+\item    Top 20 articles published in October, 2011 with the \#comments/\#reads higher than the average \#comments/\#reads having at least 20000 \#reads.
+\begin{lstlisting}[language=sql] 
+select * from (
+select a.keyarticle id, a.title,
+       sum(reads)/sum(comments) comm_by_reads,
+       avg(sum(reads)/sum(comments)) over () avg_comm_by_reads,
+       sum(reads) reads
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle
+where a.publicationyear = 2011 and a.publicationmonth = 10
+group by a.keyarticle, a.title
+order by comm_by_reads - avg_comm_by_reads desc
+) where comm_by_reads > avg_comm_by_reads and reads >= 20000 and rownum <= 20
+\end{lstlisting}
 \item    Comparing number of reads/shares/comments tagged with positive and negative group by year with ratio. Also the same with short/medium/long
 \item    Most popular tags:  Top 100 tags which has the highest value of number of articles with tags divided with number with the tags.
 \end{enumerate}
