@@ -23,22 +23,25 @@ SELECT SUM(ss.price), SUM(ss.Quantity), sl.Country FROM
   
   /*
  4. How much we would earn without applying discounts on subscription by period type by year.
- 5. [Ondra]Number of sales on different holidays in 2010 by period in United States.
+ 5. [Ondra](changed USA to Canada) Number of sales on different holidays in 2010 by period in United States.
+      21s
  */
  SELECT SUM(ss.Quantity) FROM sub_Date sd, sub_Location sl, sub_Subscription ss  
  WHERE sd.keyDate = ss.keyDate AND sl.keyLocation = ss.keyLocation
  AND sd.Thanksgiving = 'Y' OR sd.Halloween = 'Y' OR sd.Easter = 'Y' OR sd.Christmas = 'Y'  
- AND sd.Year = 2010 AND sl.Country='Canada'; /*todo change to United States*/
+ AND sd.Year = 2010 AND sl.Country='Canada'; 
  
  /*
  6. The cities with biggest revenue by country.
- 7. [Ondra]Revenue by month and by state in United States together with average revenue by states in United States in the same month
+ 7. [Ondra](Replace USA by Canada added 2011) 
+    Revenue by month and by state in Canada together with average revenue by states in Canada in the same month in 2011
+    -- todo how to put display rows only with country null & howto add column with canada average
 */
-SELECT SUM(ss.Price) AS "state revenue", AVG(groupedstates_revenu) AS "average revenue across states" 
-FROM sub_Date, sub_Location, sub_Subscription
+SELECT SUM(ss.Price) AS "state revenue", sl.Country, sl.State, sd.Month/*, AVG(groupedstates_revenu) AS "average revenue across states"*/ 
+FROM sub_Date sd, sub_Location sl, sub_Subscription ss
 WHERE sd.keyDate = ss.keyDate AND sl.keyLocation = ss.keyLocation
-AND sl.Country='USA' /* todo add usa */
-GROUP BY GROUPING SETS((sl.State,sl.Country),sd.Month);
+AND sl.Country='Canada' AND sd.Year=2011
+GROUP BY sd.Month, GROUPING SETS(sl.State,sl.Country) ORDER BY sd.Month;
 
 
 /*
