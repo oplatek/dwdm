@@ -109,9 +109,28 @@ advert_advertisement aa
 join advert_date ad on aa.keydate = ad.keydate
 group by ad.YEAR;
   \end{lstlisting}
-\item    CPM(Clicks divided by displays) for top 10 advertisers by revenue together with avg CPM for advertisers category having the advertiser at least 5 campaigns
+\item    CPM(Clicks divided by displays) for top 10 advertisers by revenue together with avg CPM for advertisers category having the advertiser at least 15 campaigns
   \begin{lstlisting}[language=sql] 
-  TODO
+select *
+from 
+(    select
+        rank() over (order by sum (aa.revenue) desc) as top,
+        sum(aa.clicks)/sum(aa.displays),ac.advertiserName,ac.advertiserCategory as cat, 
+        avg(sum(aa.clicks)/sum(aa.displays)) over (partition by ac.advertiserCategory)
+    from advert_advertisement aa
+    join advert_campaign ac on aa.keycampaign = ac.keycampaign
+    join
+      ( select distinct in_aa.advertiserName 
+        from advert_campaign in_aa
+        group by in_aa.advertiserName
+        having COUNT(in_aa.name) >= 15
+      )
+    camp on ac.advertiserName = camp.advertiserName
+    group by rollup (ac.advertiserName,ac.advertiserCategory) 
+    having grouping_id(ac.advertiserName,ac.advertiserCategory)=0
+    )
+where 
+top < 10;
   \end{lstlisting}
 \item    Revenue by advertiser category with revenue by limits 10k/20k/30/k
   \begin{lstlisting}[language=sql] 

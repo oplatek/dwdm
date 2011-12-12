@@ -7,7 +7,7 @@ all: ${NAME}.dvi
 #	dvipdfm -o $@ -p a4 -r 600 $<
 pdf: ${NAME}.pdf
 
-${NAME}.pdf: ${NAME}.ps dia
+${NAME}.pdf: ${NAME}.ps 
 	ps2pdf $< $@
 
 ${NAME}.ps: ${NAME}.dvi
