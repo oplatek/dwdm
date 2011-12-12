@@ -10,12 +10,73 @@ For the designed data warehouse write 20 aggregation queries in both natural lan
 \label{sub:Subscription business queries}
 \begin{enumerate}
   \item Revenue from subscriptions by year.
-  \item Most popular period by year.
-  \item Most revenue and quantity from subscriptions by country.
-  \item How much we would earn without applying discounts on subscription by period type  by year.
-  \item Number of sales on different holidays in 2010 by period in United States.
-  \item The cities with biggest revenue by country.
-  \item Revenue by month and by  state in United States together with average revenue by states in United States in the same month
+  \begin{lstlisting}[language=sql]
+	select sum(price * (1-discount) * quantity) revenue, d.year 
+	from sub_subscription s 
+	join sub_date d on s.keydate = d.keydate 
+	group by d.year 
+	order by year desc
+  \end{lstlisting}
+  \item Which were the most popular subscription periods each year?
+  \begin{lstlisting}[language=sql]
+	select year, p.name as period, sum(quantity) subscriptions
+	from oplatek.sub_subscription s 
+	join oplatek.sub_date d on s.keydate = d.keydate
+	join oplatek.sub_period p on s.keyperiod = p.keyperiod 
+	group by d.year, p.name
+	order by year desc, subscriptions desc
+  \end{lstlisting}
+  \item Revenue from subscriptions and subscription count by country in 2010.
+  \begin{lstlisting}[language=sql]
+	  select l.country, sum(price * (1-discount) * quantity) revenue, sum(quantity) subscriptions 
+	  from oplatek.sub_subscription s 
+	  join oplatek.sub_location l on s.keylocation = l.keylocation 
+	  join oplatek.sub_date d on s.keydate = d.keydate and d.year = 2010
+	  group by l.country 
+	  order by revenue desc
+  \end{lstlisting}
+  \item Top 10 cities from each country with the highest revenue from subscriptions in 2010.
+  \begin{lstlisting}[language=sql]  
+	select * from (select country, city, sum(price * (1-discount) * quantity) revenue, rank() over(partition by country order by sum(price * (1-discount) * quantity) desc) rank 
+	from oplatek.sub_subscription s 
+	join oplatek.sub_date d on s.keydate = d.keydate and d.year = 2010
+	join oplatek.sub_location l on s.keylocation = l.keylocation
+	group by l.country, l.city
+	order by revenue desc)
+	where rank <= 10
+  \end{lstlisting}
+  \item How much would we earn without applying discounts on subscriptions, by period type and by year?
+  \begin{lstlisting}[language=sql] 
+  	select year, period, revenue, revenue_no_discounts, (revenue_no_discounts - revenue) difference from 
+	(select d.year, p.name as period, sum(price * (1-discount) * quantity) revenue, sum(price * quantity) revenue_no_discounts
+	 from oplatek.sub_subscription s 
+	 join oplatek.sub_date d on s.keydate = d.keydate
+	 join oplatek.sub_period p on s.keyperiod = p.keyperiod
+	 group by d.year, p.name)
+	order by year desc, period asc
+  \end{lstlisting}
+  \item Number of sales on different holidays by period in Canada in 2010.
+  \begin{lstlisting}[language=sql] 
+	TODO
+	select country, year, period, total_sales, 
+	(select sum(quantity) from oplatek.sub_subscription ss, oplatek.sub_date dd where ss.keydate = dd.keydate and dd.christmas = 'Y' and ss.keyperiod = p.keyperiod and ss.keylocation = l.keylocation) as christmas,
+	from (select l.country, d.year, p.name period, sum(quantity) total_sales
+	from oplatek.sub_subscription s 
+	join oplatek.sub_date d on s.keydate = d.keydate and d.year = 2010
+	join oplatek.sub_location l on s.keylocation = l.keylocation and l.country = 'Canada'
+	join oplatek.sub_period p on s.keyperiod = p.keyperiod 
+	group by l.country, d.year, p.name)
+	order by d.year, period
+  \end{lstlisting}
+  \item Revenue by month and by state in Canada in 2010 together with average revenue by states in Canada in the same month.
+	select l.state, d.month, sum(price * (1-discount) * quantity) revenue,
+	avg(sum(price * (1-discount) * quantity)) over (partition by month) avg_rev /* avg_revenue_in_this_month_across_all_states */
+	from oplatek.sub_subscription s 
+	join oplatek.sub_location l on s.keylocation = l.keylocation and l.country = 'Canada' 
+	join oplatek.sub_date d on s.keydate = d.keydate and d.year = 2010
+	where length(l.state) = 2
+	group by l.state, d.month
+	order by state asc, month asc
 \end{enumerate}
 % subsection Subscription queries (end)
 
