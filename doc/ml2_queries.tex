@@ -131,10 +131,39 @@ from
     )
 where 
 top < 10;
-  \end{lstlisting}
-\item    Revenue by advertiser category with revenue by limits 10k/20k/30/k
+\end{lstlisting}
+\item Revenue by advertiser from "Small Fish" category who has greater revenue than average of the "Middle Fish"*bias=0.5 together with average of "Middle Fish" advertisers  
   \begin{lstlisting}[language=sql] 
-  TODO
+select ac.advertiserName, ac.advertiserCategory, sum(aa.revenue), 
+      avg(sum(aa.revenue)) over (partition by ac.advertiserCategory) as small_fish_avg,
+      ( 
+        select distinct
+            AVG(sum(aaa.revenue)) over (partition by aac.advertiserCategory) as middle_fish_avg
+        from advert_advertisement aaa 
+        join advert_campaign aac on aaa.keycampaign = aac.keycampaign
+        where aac.advertiserCategory = 'Medium Fish'   
+        group by aac.advertiserName,aac.advertiserCategory
+      ) as middle_fish_avg
+from advert_advertisement aa
+join advert_campaign ac on aa.keycampaign = ac.keycampaign
+where ac.advertiserCategory = 'Small Fish'
+group by ac.advertiserName,ac.advertiserCategory
+having sum(aa.revenue) > 0.5* (
+        -- having is stupid, I have to repeat query:)
+        select distinct
+            AVG(sum(aaa.revenue)) over (partition by aac.advertiserCategory) as middle_fish_avg
+        from advert_advertisement aaa 
+        join advert_campaign aac on aaa.keycampaign = aac.keycampaign
+        where aac.advertiserCategory = 'Medium Fish'   
+        group by aac.advertiserName,aac.advertiserCategory)
+;
+        select distinct
+            AVG(sum(aaa.revenue)) over (partition by aac.advertiserCategory) as middle_fish_avg
+        from advert_advertisement aaa 
+        join advert_campaign aac on aaa.keycampaign = aac.keycampaign
+        where aac.advertiserCategory = 'Medium Fish'   
+        group by aac.advertiserName,aac.advertiserCategory;
+  );      
   \end{lstlisting}
 \item    The Campaigns which lasted more then 5 month with revenue bigger than 10000 per month
   \begin{lstlisting}[language=sql] 
