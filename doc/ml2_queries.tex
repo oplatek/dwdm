@@ -167,7 +167,11 @@ having sum(aa.revenue) > 0.5* (
   \end{lstlisting}
 \item    The Campaigns which lasted more then 5 month with revenue bigger than 10000 per month
   \begin{lstlisting}[language=sql] 
-  TODO
+ TODO
+ select ac.name min( todo
+from advert_advertisement aa
+join advert_date ad on ad.keyDate = aa.keyDate
+join advert_campaign ac on ac.keyCampaign = aa.keyCampaign;
   \end{lstlisting}
 \item    Most popular campaigns by category and year together with avg CPM per month in this year for every month
   \begin{lstlisting}[language=sql] 
