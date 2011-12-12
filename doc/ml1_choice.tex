@@ -1,7 +1,14 @@
-Due to the fact that most of attributes hierarchies are static and narrow, in sense of branching and also simple domains, the tables in star schema do not cover too much space and allow better performance for data warehouse queries. In other words, the low normality of tables does not Affect the space requirements too badly because the numbers of possible values in hierarchies are relatively low.
+
+Due to the fact that our dimension tables are not so large, in sense of branching, and also they contain simple domains, the tables in star schema do not cover too much space.
+ The star schema also allows better performance for data warehouse queries. In other words, the low normality of tables does not affect the space requirements too badly, because the numbers of possible values in hierarchies are relatively low.
 
 On the other hand, the star schema allows us process aggregation function more effectively.
-The aggregation functions together with joins are the key operations for data warehouse and
-the star schema implements them effectively, so we decided to follow star schema.
+The aggregation functions together with joins are the key operations for data warehouse. 
+The snowflake schema is in our case split in a lot of tables with relatively small number of values.
+It does not save so much space compare to star schema, but only it results in sequences of joins.
+To conclude, we decided to follow star schema and avoid joins in our queries as much as possible.
 
-The only exception, which does not fit to our star schema, is the Tag attribute from the fact Article popularity. We create a separate table for describing n to n relation between Tags and Articles. The table is very huge and is nonsense  to make the table wider by another columns as it is displayed in star schema design. Instead we created separated table just for Tag id and Article id.
+The only exception, which does not allow us to follow our star schema from Section~\ref{sub:ml1_star}, is the {\it Tag} attribute. 
+The {\it Tag} attribute from {\it Article popularity} fact has potentially unlimited domain, because every author or editor can add arbitrary tag.  
+We are using only sample data for it, but we still created a separate table for describing $n$ to $n$ relation between Tags and Articles. 
+The table could be very huge and is nonsense  to make the table of {\it Article} dimension wider by another columns as it is displayed in star schema design. 

@@ -6,8 +6,10 @@ SELECT DISTINCT l.Country, l.Continent FROM sub_Location l;
   /* 1. [Ondra]Revenue from subscriptions by year. */
 
 SELECT SUM(ss.price), sd.YEAR FROM 
-      sub_Date sd INNER JOIN sub_Subscription ss ON (sd.keyDate = ss.keyDate)  
-      GROUP BY sd.YEAR ORDER BY sd.YEAR;
+      sub_Date sd, sub_Subscription ss 
+      WHERE (sd.keyDate = ss.keyDate)  
+      GROUP BY sd.YEAR 
+      ORDER BY sd.YEAR;
 
   /*
  2. Most popular period by year.
@@ -53,6 +55,9 @@ category in year
  3. Most read of articles by the day of week group by week together with avg
     num of articles read on this day of week
  4. [Ondra]Most commented authors group by category
+ */
+
+ /*
  5. Each author's most read articles with num of reads together with avg num of reads for this author' s department and each author in this avg query has to have at least 20 articles and all these articles must be at least 1 month old
  6. [Ondra]The articles with #comments/ #reads higher and average #comments/#reads
     by category having more reads than 20000 and which are older than month

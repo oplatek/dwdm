@@ -1,4 +1,18 @@
+Most of the attributes have self explanatory name.
+Possibly, the only exception is {\it Period} dimension in {\it Subscription} fact. The {\it Period} describes different types of subscriptions based on how long the subscription last. 
 
+We managed to get all data which fit our hierarchies completely, so we do not have any optional attributes nor we use any convergences. 
 
-We offers different types of subscriptions based on how long the subscription last. We reflect it in attribute period.
+\subsection*{Article popularity attributes} 
+The biggest hierarchy is in {\it Article title}, which has attached hierarchies of {\it Subcategory}, {\it Category} and the hierarchy {\it Day}, {\it Month}, {\it Year} together with {\it Author} hierarchy. The {\it Date} hierarchy in {\it Article} dimension represents publication date.
 
+We decided to completely separate dimension {\it Day of week} from {\it Time} dimension, because we have no interest in rolling up using {\it Day of week}.
+
+\subsection*{Subscription attributes}
+In this fact we also separated {\it Day of a week} and we also used hierarchies {\it Date}. However, we added {\it Week} and different {\it "Holidays"} in the hierarchy after the {\it Day}. We did not separate it completely, because we are interested which day of month is the most important, so we can aggregate over a day.
+
+Another thing worth to note is that {\it Order} is a descriptive attribute of {\it Period}, so we can not aggregate over it.
+
+\subsection*{Advertisement attributes} 
+This is out simplest fact and contains only hierarchy of {\it Date} and hierarchy of {\it Campaign}.
+The {\it Campaign} hierarchy contains {\it Advertiser category}, which describes how important The Journal managers that the advertiser is. The {\it Advertiser category} allows us to find out how well we rate our customers in time.
