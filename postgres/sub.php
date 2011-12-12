@@ -53,10 +53,10 @@ foreach (array(/* 'us' => 'United States', */ 'canada' => 'Canada') as $filename
 				$month = date('m', $date);
 				$year = date('Y', $date);
 				$week = date('W', $date);
-				$christmas = date('md') == '2412' ? 'TRUE' : 'FALSE';
-				$halloween = date('md') == '3110' ? 'TRUE' : 'FALSE';
-				$easter = date('md') == '0804' ? 'TRUE' : 'FALSE'; // hack
-				$thanksgiving = date('md') == '2411' ? 'TRUE' : 'FALSE'; // hack
+				$christmas = date('md',$date) == '2412' ? 'Y' : 'N';
+				$halloween = date('md',$date) == '3110' ? 'Y' : 'N';
+				$easter = date('md',$date) == '0804' ? 'Y' : 'N'; // hack
+				$thanksgiving = date('md',$date) == '2411' ? 'Y' : 'N'; // hack
 				echo "INSERT INTO sub.Date VALUES ($key, $day, $month, $year, $week, $thanksgiving, $halloween, $easter, $christmas);\n";
 			}
 			$dates[$date] = true;
