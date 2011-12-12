@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # This script "init.sh" creates and populates fictional data warehouse. The domain of the data warehouse is international newspapers.
+# it needes csv with data for Canada and USA
 # We are using Oracle Database 8.1 and accessing it via Oracle Client
 # Installation of Oracle Client is described at https://www.inf.unibz.it/wiki/auth/oracle_db_user
 # Pass always 3 arguments:
@@ -26,20 +27,24 @@ DATABASE="https://www.inf.unibz.it/wiki/auth/oracle_db_user"
 
 # advert.sql Creates tables for the fact Advertisement
 Init[1]="advert.sql"
+# creates the populating script
+php advert.php>"advert.data.sql"
 # advert.data.sql Populates tables of the fact Advertisement
 Init[2]="advert.data.sql"
 
 # artpop.sql Creates tables for the fact Article Popularity  
 Init[3]="artpop.sql"
+# creates the populating script
+php artpop.php>"artpop.data.sql"
 # parts.artpop_dat0[012].sql Populates tables of the fact Article Popularity in steps 1,2,3
-Init[4]="parts.artpop_dat00.sql"
-Init[5]="parts.artpop_dat01.sql"
-Init[6]="parts.artpop_dat02.sql"
+Init[4]="artpop.data.sql"
 
 # Creates tables for the fact Subscriptions  
-Init[7]="sub.sql"
+Init[5]="sub.sql"
+# creates the populating script
+php sub.php>"sub.data.sql"
 # Populates tables of the fact Subscriptions 
-Init[8]="sub.data.sql"
+Init[6]="sub.data.sql"
 
 # DELETE (DROPPPING) TABLES:
 #   dropping scripts are independent 
@@ -54,7 +59,7 @@ Drop[3]="drop_sub.sql"
 
 if [ ${ACTION} == "init" ]; then
     # populating database with via scrips in Init array
-    for index in 1 2 3 4 5 7 8    # run init scripts.
+    for index in 1 2 3 4 5 6   # run init scripts.
     do
         echo "${LOGIN}/${PASSWD}@${DATABASE} @${Init[index]}" 
         echo "..." 
