@@ -259,17 +259,33 @@ having sum(aa.revenue) > 0.5* (
     group by aac.advertiserName,aac.advertiserCategory;
   );      
   \end{lstlisting}
-\item    The Campaigns which lasted more then 5 month with revenue bigger than 10000 per month
+\item    The Campaigns which touched more than 5 month with maximum revenue in one month bigger than 140 all in year 2011 
   \begin{lstlisting}[language=sql] 
- TODO
- select ac.name min( todo
-from advert_advertisement aa
-join advert_date ad on ad.keyDate = aa.keyDate
-join advert_campaign ac on ac.keyCampaign = aa.keyCampaign;
+select * from (
+  select ac.name, max(sum(aa.revenue)) over (partition by ac.name) as max_revenue_over_month
+  from advert_advertisement aa
+  join advert_date ad on ad.keyDate = aa.keyDate
+  join advert_campaign ac on ac.keyCampaign = aa.keyCampaign
+  where ad.year=2011
+  group by ac.name, ad.month
+  having ( max(ad.month) - min(ad.month)) >= 0 
+    or ( (max(ad.month) - min(ad.month)) = 5 and (max(ad.day) - min(ad.day)) >=0 )
+) where max_revenue_over_month > 140;
   \end{lstlisting}
-\item    Most popular campaigns by category and year together with avg CPM per month in this year for every month
+\item Most popular campaigns by year together with their popularity(clicks+displays) and  avg CPM per month
   \begin{lstlisting}[language=sql] 
-  TODO
+select y, c, n, popularity, cpm_per_month
+from (
+  select ad.year y, ac.name n,  ad.month, ac.advertisercategory c
+  , sum(aa.clicks+aa.displays) popularity
+  ,(avg(sum(aa.clicks)/sum(aa.displays)) over (partition by ad.month)) cpm_per_month 
+  from advert_advertisement aa
+  join advert_date ad on ad.keyDate = aa.keyDate
+  join advert_campaign ac on ac.keyCampaign = aa.keyCampaign
+  group by ad.month,ad.year, ac.name,ac.advertisercategory
+  )
+order by y desc, c, popularity desc, n;
+
   \end{lstlisting}
 \end{enumerate}
 % section Business queries (end)
