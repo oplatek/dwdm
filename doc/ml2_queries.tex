@@ -317,15 +317,8 @@ order by y desc, c, popularity desc, n;
 
 % section Advertisement business queries (end)
 
-For Your data warehouse write the following queries in natural language and
-SQL, include the results. If some of the queries, that You prepared for the
-previous Milestone 2 tasks overlap with those below, count them as done.
 
-1. 2 ranking queries. See article queries 1 & 4.
-2. 2 windowing queries. See article queries 5 & 7.
-3. 2 period-to-period comparison queries (queries comparing values across
-time periods, e.g. compare sales for every week of the current year with
-the sales of the corresponding weeks in the past year).
+{\bf DELETE  moved to special queries}
 
 Revenue from subscriptions by year and week compared to the revenue on the same week in the previous year.
 \begin{lstlisting}[language=sql] 
@@ -349,8 +342,7 @@ group by d.year, d.week)
 order by year desc, week asc
 \end{lstlisting}
 
-4. 2 dense reports (i.e. with rows for all combinations of dimension values
-displayed even when no fact data exist for them).
+{\bf DELETE  moved to special queries}
 
 Revenue from subscriptions by year.
 \begin{lstlisting}[language=sql] 
