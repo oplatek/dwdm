@@ -127,8 +127,15 @@ join oplatek.artpop_date d on f.keydate = d.keydate
 group by a.category, d.hour
 order by a.category asc, d.hour asc
 \end{lstlisting}
-\item    Most read of articles by the day of week group by week together with avg num of articles read on this day of week
+\item    Number of articles published in each subcategory in year 2010 together with the % of total articles in the category.
 \begin{lstlisting}[language=sql] 
+select category, subcategory, articles/sum(articles) over (partition by category) perct, articles, sum(articles) over (partition by category) as articles_in_category from (
+select a.category, a.subcategory, count(a.keyarticle) articles
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle and a.publicationyear = 2011
+group by a.category, a.subcategory
+order by category, subcategory
+)
 \end{lstlisting}
 \item    Top 5 authors in every category by comments on their articles.
 \begin{lstlisting}[language=sql] 
@@ -179,8 +186,32 @@ order by comm_by_reads - avg_comm_by_reads desc
 ) where comm_by_reads > avg_comm_by_reads 
 and reads >= 20000 and rownum <= 20
 \end{lstlisting}
-\item    Comparing number of reads/shares/comments tagged with positive and negative group by year with ratio. Also the same with short/medium/long
-\item    Most popular tags:  Top 100 tags which has the highest value of number of articles with tags divided with number with the tags.
+\item    Compare the number of reads/shares/comments of articles tagged with positive and negative tags for each year.
+\begin{lstlisting}[language=sql] 
+select year, tag, 
+reads, sum(reads) over (partition by year) reads_total, reads/sum(reads) over (partition by year) reads_perc,
+reads, sum(shares) over (partition by year) shares_total, shares/sum(shares) over (partition by year) shares_perc,
+reads, sum(comments) over (partition by year) comments_total, comments/sum(comments) over (partition by year) comments_perc
+from (
+select a.publicationyear year, t.tag, sum(reads) reads, sum(comments) comments, sum(shares) shares
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle
+join oplatek.artpop_tag t on t.tag in ('positive', 'negative')
+join oplatek.artpop_articletags artt on a.keyarticle = artt.keyarticle and artt.keytag = t.keytag 
+group by a.publicationyear, t.tag
+order by year desc, tag
+)
+\end{lstlisting}
+\item   Top 100 tags by article count in Business category in 2011.
+\begin{lstlisting}[language=sql] 
+select rank() over (order by count(a.keyarticle) desc) rank, t.tag, count(a.keyarticle) articles
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle and a.category = 'Business' and a.publicationyear = 2011
+join oplatek.artpop_tag t on 1=1
+join oplatek.artpop_articletags artt on a.keyarticle = artt.keyarticle and artt.keytag = t.keytag
+group by t.tag
+order by rank, tag asc
+\end{lstlisting}
 \end{enumerate}
 % subsection Article  queries (end)
 
