@@ -13,11 +13,11 @@ Let us name queries $2$ and $5$ from Article section or queries $1$, $2$, $3$, $
 % subsection Windowin queries (end)
 
 \subsection{Period-to-Period queries} % (fold)
-    \begin{itemize}
-        \item Difference between number of reads of article on the publication date and the date in one week and the date in 2 weeks
-        \item Total revenue from subscriptions in last 3 years
-    \end{itemize}
 \label{sub:Period-to-Period queries}
+%    \begin{itemize}
+%        \item Difference between number of reads of article on the publication date and the date in one week and the date in 2 weeks
+%        \item Total revenue from subscriptions in last 3 years
+%    \end{itemize}
 \begin{itemize}
     \item Revenue from subscriptions by year and week compared to the revenue on the same week in the previous year.
 \begin{lstlisting}[language=sql] 
@@ -46,8 +46,8 @@ order by year desc, week asc
 
 \subsection{Dense reports} % (fold)
 \label{sub:Dense reports}
-
-Revenue from subscriptions by year.
+\begin{itemize}
+\item Revenue from subscriptions by year.
 \begin{lstlisting}[language=sql] 
 select b.year, NVL(revenue, 0)  dense_revenue from (
 select year, sum(price * (1-discount) * quantity) revenue 
@@ -63,7 +63,7 @@ right outer join (
 order by b.year desc
 \end{lstlisting}
 
-Number of articles published in 1999 in each category.
+\item Number of articles published in 1999 in each category.
 \begin{lstlisting}[language=sql] 
 select b.category, b.subcategory, NVL(articles, 0)  dense_articles from (
 select a.category, a.subcategory, count(a.keyarticle) articles
@@ -78,5 +78,6 @@ right outer join (
 ) b on (a.category = b.category and a.subcategory = b.subcategory)
 order by category, subcategory
 \end{lstlisting}
+\end{itemize}
 
 % subsection Dense reports (end)
