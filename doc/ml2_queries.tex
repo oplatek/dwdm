@@ -68,16 +68,17 @@ order by year desc, period asc
 \begin{lstlisting}[language=sql] 
 TODO
 select country, year, period, total_sales, 
-(select sum(quantity) from oplatek.sub_subscription ss, oplatek.sub_date dd 
-where ss.keydate = dd.keydate and dd.christmas = 'Y' 
-and ss.keyperiod = p.keyperiod 
-and ss.keylocation = l.keylocation) as christmas,
-from (select l.country, d.year, p.name period, sum(quantity) total_sales
-from oplatek.sub_subscription s 
-join oplatek.sub_date d on s.keydate = d.keydate and d.year = 2010
-join oplatek.sub_location l on s.keylocation = l.keylocation and l.country = 'Canada'
-join oplatek.sub_period p on s.keyperiod = p.keyperiod 
-group by l.country, d.year, p.name)
+(select sum(quantity) from 
+    oplatek.sub_subscription ss, oplatek.sub_date dd 
+ where ss.keydate = dd.keydate and dd.christmas = 'Y' 
+  and ss.keyperiod = p.keyperiod 
+  and ss.keylocation = l.keylocation) as christmas,
+ from (select l.country, d.year, p.name period, sum(quantity) total_sales
+ from oplatek.sub_subscription s 
+ join oplatek.sub_date d on s.keydate = d.keydate and d.year = 2010
+ join oplatek.sub_location l on s.keylocation = l.keylocation and l.country = 'Canada'
+ join oplatek.sub_period p on s.keyperiod = p.keyperiod 
+ group by l.country, d.year, p.name)
 order by d.year, period
 \end{lstlisting}
   \item Revenue by month and by state in Canada in 2010 together with average revenue by states in Canada in the same month.
@@ -105,15 +106,15 @@ order by state asc, month asc
 \item    Top 10 read articles and their authors for every month in year 2011.
 \begin{lstlisting}[language=sql] 
 select * from (
-  select d.month, a.keyarticle as id, 
-    a.title, a.author, sum(reads) reads, 
-    rank() over (partition by month order by sum(reads) desc) rank 
-  from oplatek.artpop_articlepopularity f
-  join oplatek.artpop_article a on f.keyarticle = a.keyarticle
-  join oplatek.artpop_date d on f.keydate = d.keydate 
-      and d.year = 2010
-  group by d.month, a.keyarticle, a.title, a.author
-  order by month asc, reads desc
+ select d.month, a.keyarticle as id, 
+  a.title, a.author, sum(reads) reads, 
+  rank() over (partition by month order by sum(reads) desc) rank 
+ from oplatek.artpop_articlepopularity f
+ join oplatek.artpop_article a on f.keyarticle = a.keyarticle
+ join oplatek.artpop_date d on f.keydate = d.keydate 
+     and d.year = 2010
+ group by d.month, a.keyarticle, a.title, a.author
+ order by month asc, reads desc
 ) where rank <= 10
 \end{lstlisting}
 \item    Hours of the day when most articles are read grouped by category in year 2010 together with the average number of articles read during this hour in the same year.
@@ -222,8 +223,9 @@ order by rank, tag asc
 \item    Revenue by year together with average revenue in all years together with revenue in this year and together with next year
 \begin{lstlisting}[language=sql] 
 select ad.Year, sum(aa.revenue), 
-  avg(sum(aa.revenue)) over () AS total_avg,
-  sum(sum(aa.revenue)) over (order by ad.year rows 1 preceding) AS sum_last_2_years
+  avg(sum(aa.revenue)) over () as total_avg,
+  sum(sum(aa.revenue)) over 
+    (order by ad.year rows 1 preceding) as sum_last_2_years
 from   
 advert_advertisement aa
 join advert_date ad on aa.keydate = ad.keydate
@@ -257,12 +259,12 @@ top < 10;
 \item Revenue by advertiser from "Small Fish" category who has greater revenue than average of the "Middle Fish"*bias=0.5 together with average of "Middle Fish" advertisers  
   \begin{lstlisting}[language=sql] 
 select ac.advertiserName, ac.advertiserCategory, sum(aa.revenue), 
-  avg(sum(aa.revenue)) over (partition by ac.advertiserCategory) 
-  as small_fish_avg,
-  ( 
-    select distinct
-        AVG(sum(aaa.revenue)) over 
-        (partition by aac.advertiserCategory) as middle_fish_avg
+ avg(sum(aa.revenue)) over (partition by ac.advertiserCategory) 
+ as small_fish_avg,
+ ( 
+  select distinct
+   AVG(sum(aaa.revenue)) over 
+    (partition by aac.advertiserCategory) as middle_fish_avg
     from advert_advertisement aaa 
     join advert_campaign aac on aaa.keycampaign = aac.keycampaign
     where aac.advertiserCategory = 'Medium Fish'   
@@ -281,26 +283,37 @@ having sum(aa.revenue) > 0.5* (
   join advert_campaign aac on aaa.keycampaign = aac.keycampaign
   where aac.advertiserCategory = 'Medium Fish'   
   group by aac.advertiserName,aac.advertiserCategory);
+  \end{lstlisting}
+\item    The Campaigns which touched more than 5 month with maximum revenue in one month bigger than 140 all in year 2011 
+  \begin{lstlisting}[language=sql] 
+select * from (
+  select ac.name, max(sum(aa.revenue)) 
+    over (partition by ac.name) as max_revenue_over_month
+  from advert_advertisement aa
+  join advert_date ad on ad.keyDate = aa.keyDate
+  join advert_campaign ac on ac.keyCampaign = aa.keyCampaign
+  where ad.year=2011
+  group by ac.name, ad.month
+  having ( max(ad.month) - min(ad.month)) >= 0 
+    or ( (max(ad.month) - min(ad.month)) = 5 
+    and (max(ad.day) - min(ad.day)) >=0 )
+) where max_revenue_over_month > 140;
+  \end{lstlisting}
+\item Most popular campaigns by year together with their popularity(clicks+displays) and  avg CPM per month
+  \begin{lstlisting}[language=sql] 
+select y, c, n, popularity, cpm_per_month
+from (
+  select ad.year y, ac.name n,  ad.month, ac.advertisercategory c
+  , sum(aa.clicks+aa.displays) popularity
+  ,(avg(sum(aa.clicks)/sum(aa.displays)) 
+    over (partition by ad.month)) cpm_per_month 
+  from advert_advertisement aa
+  join advert_date ad on ad.keyDate = aa.keyDate
+  join advert_campaign ac on ac.keyCampaign = aa.keyCampaign
+  group by ad.month,ad.year, ac.name,ac.advertisercategory
+  )
+order by y desc, c, popularity desc, n;
 
-    select distinct
-        AVG(sum(aaa.revenue)) over (partition by aac.advertiserCategory) as middle_fish_avg
-    from advert_advertisement aaa 
-    join advert_campaign aac on aaa.keycampaign = aac.keycampaign
-    where aac.advertiserCategory = 'Medium Fish'   
-    group by aac.advertiserName,aac.advertiserCategory;
-  );      
-  \end{lstlisting}
-\item    The Campaigns which lasted more then 5 month with revenue bigger than 10000 per month
-  \begin{lstlisting}[language=sql] 
- TODO
- select ac.name min( todo
-from advert_advertisement aa
-join advert_date ad on ad.keyDate = aa.keyDate
-join advert_campaign ac on ac.keyCampaign = aa.keyCampaign;
-  \end{lstlisting}
-\item    Most popular campaigns by category and year together with avg CPM per month in this year for every month
-  \begin{lstlisting}[language=sql] 
-  TODO
   \end{lstlisting}
 \end{enumerate}
 % section Business queries (end)
