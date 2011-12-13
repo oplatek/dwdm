@@ -319,3 +319,70 @@ order by y desc, c, popularity desc, n;
 % section Business queries (end)
 
 % section Advertisement business queries (end)
+
+For Your data warehouse write the following queries in natural language and
+SQL, include the results. If some of the queries, that You prepared for the
+previous Milestone 2 tasks overlap with those below, count them as done.
+
+1. 2 ranking queries. See article queries 1 & 4.
+2. 2 windowing queries. See article queries 5 & 7.
+3. 2 period-to-period comparison queries (queries comparing values across
+time periods, e.g. compare sales for every week of the current year with
+the sales of the corresponding weeks in the past year).
+
+Revenue from subscriptions by year and week compared to the revenue on the same week in the previous year.
+\begin{lstlisting}[language=sql] 
+select year, week, revenue, sum(revenue) over (partition by week order by year RANGE BETWEEN 1 PRECEDING AND 1 PRECEDING) revenue_last_year_this_week        
+from (
+select year, week, sum(price * (1-discount) * quantity) revenue 
+from oplatek.sub_subscription s 
+join oplatek.sub_date d on s.keydate = d.keydate 
+group by d.year, d.week)
+order by year desc, week asc
+\end{lstlisting}
+
+Revenue from subscriptions by year and week compared to the average revenue on the same week in the 3 previous years.
+\begin{lstlisting}[language=sql] 
+select year, week, revenue, avg(revenue) over (partition by week order by year RANGE BETWEEN 3 PRECEDING AND 1 PRECEDING) avg_revenue_prev_3_years        
+from (
+select year, week, sum(price * (1-discount) * quantity) revenue 
+from oplatek.sub_subscription s 
+join oplatek.sub_date d on s.keydate = d.keydate
+group by d.year, d.week)
+order by year desc, week asc
+\end{lstlisting}
+
+4. 2 dense reports (i.e. with rows for all combinations of dimension values
+displayed even when no fact data exist for them).
+
+Revenue from subscriptions by year.
+\begin{lstlisting}[language=sql] 
+select b.year, NVL(revenue, 0)  dense_revenue from (
+select year, sum(price * (1-discount) * quantity) revenue 
+from oplatek.sub_subscription s 
+join oplatek.sub_date d on s.keydate = d.keydate 
+group by d.year 
+order by year desc
+) a
+right outer join (
+  select distinct dd.year
+  from oplatek.sub_date dd
+) b on (a.year = b.year)
+order by b.year desc
+\end{lstlisting}
+
+Number of articles published in 1999 in each category.
+\begin{lstlisting}[language=sql] 
+select b.category, b.subcategory, NVL(articles, 0)  dense_articles from (
+select a.category, a.subcategory, count(a.keyarticle) articles
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle and a.publicationyear = 1999
+group by a.category, a.subcategory
+order by category
+) a
+right outer join (
+  select distinct aa.category, aa.subcategory
+  from oplatek.artpop_article aa
+) b on (a.category = b.category and a.subcategory = b.subcategory)
+order by category, subcategory
+\end{lstlisting}
