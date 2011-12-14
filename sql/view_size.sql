@@ -55,7 +55,7 @@ select distinct segment_name from user_extents;
 
 
 
-create materialized view view_s_m 
+create materialized view view_co 
 build immediate  
 --refresh fast on commit
 disable query rewrite -- disables oracle by rewriting the queries by itself using this view
@@ -63,10 +63,14 @@ as
 select sum( s.price * (1-s.discount)  * s.quantity )  from sub_subscription s
 join sub_date d on s.keyDate = d.keyDate
 join sub_location l on s.keyLocation = l.keyLocation
-group by d.month, l.state; 
+--group by d.month, l.state; -- view_s_m 
+--group by l.state; -- view_s
+--group by d.month; -- view_m
+group by l.country; -- view_co
 
--- drop materialised view m_test
-drop materialized view m_test; 
+
+-- drop materialised view NAME
+drop materialized view view_d; 
 -- show usr NOT materialized views
 select * from user_views;
 -- drop normal view

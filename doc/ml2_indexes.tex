@@ -49,11 +49,11 @@ group by l.country
 order by revenue desc
 \end{lstlisting}
 
-There should be B-tree indexes on $sub_subscription$. $ keyLocation$ and $sub_location.keyLocation$. Bitmap indexes are not suitable for this because there are many possible values and such a bitmap index would take up much more space.
+There should be B-tree indexes on $sub\_subscription$. $ keyLocation$ and $sub\_location.keyLocation$. Bitmap indexes are not suitable for this because there are many possible values and such a bitmap index would take up much more space.
 \begin{itemize}
 \item Index size: $(1000000*8+1000000*8)/(4096*1) = 21.48 MB$ (30.52 GB for bitmap indexes)
 \item Computation time: $O(log n)$
 \item Update cost:$O(log n)$
 \end{itemize}
 
-There should be an index of $(keyDate, year)$ on $sub_date$. Assuming 365 days per year and 100 years $\rightarrow$ 36500 tuples. 36 thousands values is not considered a small set which would be suitable for bitmap. 
+There should be an index of $(keyDate, year)$ on $sub\_date$. Assuming 365 days per year and 100 years $\rightarrow$ 36500 tuples. 36 thousands values is not considered a small set which would be suitable for bitmap. 
