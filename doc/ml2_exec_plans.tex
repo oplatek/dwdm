@@ -1,0 +1,50 @@
+(
+We have chosen fact Subscription and we are going to 
+implement materialised views for queries number $3$ $4$ and $7$ from Subscription part of Section~\ref{sec:ml2_queries}.
+    
+ We have chosen these facts because they use "where" clause on columns with no indexes 
+ and frequently used in our data warehouse, which should result in better performance results
+ of our data warehouse.
+
+ In our queries we do not use dimensions {\it Period Name} and {\it Day of week}, but 
+ we use {\it Date} hierarchy and {\it Location} hierarchy. 
+ In order to discuss, which materialised views should we implement we will use Lattice framework to describe dependencies. We will denote the size of views directly in the lattice diagram for relevant views.
+
+ The group by sets needed to answer all 3 queries are represented by all nodes except the node representing the finest granularity (the top most) in lattice on Figure~\ref{fig:lattice}. (So we do not marked there).
+
+\begin{figure}[!hbp]
+\caption{\label{t:attrib}Attributes in group by statement from our 3 queries}
+\begin{center}
+\begin{tabular}{|p{3cm}|p{3cm}|p{5cm}|}
+\hline
+Query 3 & Query 4 & Query  7\\
+\hline
+\hline
+Country & City, State  & State, Country, Month\\
+\hline
+\end{tabular}
+\end{center}
+\end{figure}
+ All views which has at least the same level of aggregation as our chosen 3 queries are relevant candidates for materialised views. Unfortunately, our 3 queries covers almost whole lattice which represents the level of aggregation so we have to decide among large number of candidates.
+
+Let us firstly present some numbers.
+\begin{itemize}
+    \item Subscription fact table has 44632 rows
+    \item Join of fact table and {\it location} dimension has 4463200 rows (all queries)
+    \item Join of fact table and {\it date} dimension 163085328          (query 7)
+\end{itemize}
+Size of one rows on disc space is:
+http://askanantha.blogspot.com/2008/12/script-for-getting-oracle-table-size.html
+\begin{itemize}
+    \item 
+\end{itemize}
+We have decided to use materialised
+
+\begin{figure}[!hbp]
+\begin{center}
+  \includegraphics[scale=0.45]{lattice}
+\caption{\label{fig:lattice}  Lattice}
+\end{center}
+\end{figure}
+
+
