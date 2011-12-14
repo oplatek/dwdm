@@ -1,0 +1,57 @@
+1. Check what types of indexes does Your DBMS support. Name and de-
+scribe those of them which are especially useful for speeding up Your
+queries.
+
+Oracle 10g provides several indexing schemes that provide complementary performance functionality. These are:
+* B-tree indexes: the default and the most common
+* B-tree cluster indexes: defined specifically for cluster
+* Hash cluster indexes: defined specifically for a hash cluster
+* Global and local indexes: relate to partitioned tables and indexes
+* Reverse key indexes: most useful for Oracle Real Application Clusters applications
+* Bitmap indexes: compact; work best for columns with a small set of values
+* Function-based indexes: contain the precomputed value of a function/expression
+* Domain indexes: specific to an application or cartridge.
+http://docs.oracle.com/cd/B19306_01/server.102/b14231/indexes.htm
+
+A B-tree is a tree data structure that keeps data sorted and allows searches, sequential access, insertions, and deletions in logarithmic time. It is designed to allow quickly finding those tuples that have a specific key value. For this reason, they are suitable for speeding up selection operations. 
+
+We will use b-trees to index primary keys and other columns which are used to filter data.
+
+Bitmap indexes are also designed for finding tuples by a specific key but are very structually different from b-tree indexes. A bitmap index is like two-dimensional boolean arrays of the same size as the number of rows for every value where each element contains a binary value indicating whether the row contains this value. In this structure, the binary value takes up only 1 bit and for each possible value the number of rows bits are used. It is much more space efficient than b-trees if the number of possible values is very low. Another feature of bitmap indexes is the ability to quickly do index intersections.
+
+In our data warehouse we have several columns which contain only a small set of possible values. By using bitmap indexes for these columns, it is possible to reduce the storage space taken up by the indexes. When a query filters data with several of these columns at the same time, the database system will combine these indexes to return data very quickly.
+
+
+2. For the chosen queries and their versions which use the materialized views,
+implement indexes to improve their performance (You can try to evaluate
+several strategies and choose the best one, e.g. best speed/size ratio).
+Argue Your choice. Describe the overhead (index size, computation time,
+index update costs, etc.) of implementing the chosen indexes
+
+The following formulas to calculate the size of indexes are used: 
+B-Tree index: (NK*len(k)+NR*len(r))/(D*u)
+Bitmap index: (NR/D*8)*NK
+where
+NK = number of distinct key values
+NR = 1000000 number of relations
+len(k) = key length in kilogbytes
+len(r) = RID (disk page and location) length in kilobytes
+D = 4096 disk page size in kilogbytes
+u = 1 fill factor for leaves
+
+\begin{lstlisting}[language=sql]
+select l.country, sum(price * (1-discount) * quantity) revenue, 
+  sum(quantity) subscriptions 
+from oplatek.sub_subscription s 
+join oplatek.sub_location l on s.keylocation = l.keylocation 
+join oplatek.sub_date d on s.keydate=d.keydate and d.year=2010
+group by l.country 
+order by revenue desc
+\end{lstlisting}
+
+There should be b-tree indexes on sub_subscription.keyLocation and sub_location.keyLocation. Bitmap indexes are not suitable for this because there are many possible values and such a bitmap index would take up much more space.
+* Index size: (1000000*8+1000000*8)/(4096*1) = 21.48 MB (30.52 GB for bitmap indexes)
+* Computation time: O(log n)
+* Update cost: O(log n)
+
+There should be an index of (keyDate, year) on sub_date. Assuming 365 days per year and 100 years = 36500 tuples which is thousands which is not considered a small set of values which would be suitable for bitmap 
