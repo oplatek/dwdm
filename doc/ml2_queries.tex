@@ -7,7 +7,7 @@ select sum(price * (1-discount) * quantity) revenue, d.year
 from sub_subscription s 
 join sub_date d on s.keydate = d.keydate 
 group by d.year 
-order by year desc
+order by year desc;
 \end{lstlisting}
   \item Which were the most popular subscription periods each year?
 \begin{lstlisting}[language=sql]
@@ -16,7 +16,7 @@ from oplatek.sub_subscription s
 join oplatek.sub_date d on s.keydate = d.keydate
 join oplatek.sub_period p on s.keyperiod = p.keyperiod 
 group by d.year, p.name
-order by year desc, subscriptions desc
+order by year desc, subscriptions desc;
 \end{lstlisting}
   \item Revenue from subscriptions and subscription count by country in 2010.
 \begin{lstlisting}[language=sql]
@@ -26,7 +26,7 @@ from oplatek.sub_subscription s
 join oplatek.sub_location l on s.keylocation = l.keylocation 
 join oplatek.sub_date d on s.keydate=d.keydate and d.year=2010
 group by l.country 
-order by revenue desc
+order by revenue desc;
 \end{lstlisting}
   \item Top 10 cities from each country with the highest revenue from subscriptions in 2010.
 \begin{lstlisting}[language=sql]  
@@ -41,7 +41,7 @@ join oplatek.sub_location l
   on s.keylocation = l.keylocation
 group by l.country, l.city
 order by revenue desc)
-where rank <= 10
+where rank <= 10;
 \end{lstlisting}
   \item How much would we earn without applying discounts on subscriptions, by period type and by year?
 \begin{lstlisting}[language=sql] 
@@ -54,7 +54,7 @@ select year, period, revenue, revenue_no_discounts,
      join oplatek.sub_date d on s.keydate = d.keydate
      join oplatek.sub_period p on s.keyperiod = p.keyperiod
      group by d.year, p.name)
-order by year desc, period asc
+order by year desc, period asc;
 \end{lstlisting}
   \item Number of sales on different holidays by period in Canada in 2010.
 \begin{lstlisting}[language=sql] 
@@ -75,7 +75,7 @@ select country, year, period, total_sales,
          and l.country = 'Canada'
        join oplatek.sub_period p on s.keyperiod = p.keyperiod 
        group by l.country, d.year, p.name)
-order by d.year, period
+order by d.year, period;
 \end{lstlisting}
   \item Revenue by month and by state in Canada in 2010 together with average revenue by states in Canada in the same month.
 \begin{lstlisting}[language=sql] 
@@ -91,7 +91,7 @@ join oplatek.sub_date d
     on s.keydate = d.keydate and d.year = 2010
 where length(l.state) = 2
 group by l.state, d.month
-order by state asc, month asc
+order by state asc, month asc;
 \end{lstlisting}
 \end{enumerate}
 % subsection Subscription queries (end)
@@ -111,7 +111,7 @@ select * from (
      and d.year = 2010
  group by d.month, a.keyarticle, a.title, a.author
  order by month asc, reads desc
-) where rank <= 10
+) where rank <= 10;
 \end{lstlisting}
 \item    Hours of the day when most articles are read grouped by category in year 2010 together with the average number of articles read during this hour in the same year.
 \begin{lstlisting}[language=sql] 
@@ -122,17 +122,22 @@ join oplatek.artpop_article a on f.keyarticle = a.keyarticle
 join oplatek.artpop_date d on f.keydate = d.keydate 
     and d.year = 2010
 group by a.category, d.hour
-order by a.category asc, d.hour asc
+order by a.category asc, d.hour asc;
 \end{lstlisting}
 \item    Number of articles published in each subcategory in year 2010 together with the % of total articles in the category.
 \begin{lstlisting}[language=sql] 
-select category, subcategory, articles/sum(articles) over (partition by category) perct, articles, sum(articles) over (partition by category) as articles_in_category from (
-select a.category, a.subcategory, count(a.keyarticle) articles
-from oplatek.artpop_articlepopularity f
-join oplatek.artpop_article a on f.keyarticle = a.keyarticle and a.publicationyear = 2011
-group by a.category, a.subcategory
-order by category, subcategory
-)
+select category, subcategory, 
+ articles/sum(articles) over (partition by category) perct, 
+ articles, 
+ sum(articles) over (partition by category) as articles_in_category 
+ from (
+  select a.category, a.subcategory, count(a.keyarticle) articles
+  from oplatek.artpop_articlepopularity f
+  join oplatek.artpop_article a 
+   on f.keyarticle = a.keyarticle and a.publicationyear = 2011
+  group by a.category, a.subcategory
+  order by category, subcategory
+ );
 \end{lstlisting}
 \item    Top 5 authors in every category by comments on their articles.
 \begin{lstlisting}[language=sql] 
@@ -144,7 +149,7 @@ from oplatek.artpop_articlepopularity f
 join oplatek.artpop_article a on f.keyarticle = a.keyarticle
 group by a.category, a.author
 order by a.category asc, comments desc
-) where rank <= 5
+) where rank <= 5;
 \end{lstlisting}
 \item    Each author's 5 most read articles with the number of total article reads together with the average number of article reads for this author's department and each author must have at least 20 articles published, all these articles must have been published before 2011 and total reads for each article must be above the average article read count for the author's department.
 \begin{lstlisting}[language=sql] 
@@ -165,7 +170,7 @@ where a.publicationyear < 2011
 group by a.author, a.authordepartment, a.keyarticle, a.title
 order by a.author, rank asc)
 where rank <= 5 and reads > deparment_reads 
-and total_articles >= 20
+and total_articles >= 20;
 \end{lstlisting}
 \item    Top 20 articles published in October, 2011 with the \#comments/\#reads higher than the average \#comments/\#reads having at least 20000 \#reads.
 \begin{lstlisting}[language=sql] 
@@ -185,29 +190,38 @@ and reads >= 20000 and rownum <= 20
 \end{lstlisting}
 \item    Compare the number of reads/shares/comments of articles tagged with positive and negative tags for each year.
 \begin{lstlisting}[language=sql] 
-select year, tag, 
-reads, sum(reads) over (partition by year) reads_total, reads/sum(reads) over (partition by year) reads_perc,
-reads, sum(shares) over (partition by year) shares_total, shares/sum(shares) over (partition by year) shares_perc,
-reads, sum(comments) over (partition by year) comments_total, comments/sum(comments) over (partition by year) comments_perc
+select year, tag, reads, 
+ sum(reads) over (partition by year) reads_total, 
+ reads/sum(reads) over (partition by year) reads_perc,
+ reads, sum(shares) over (partition by year) shares_total, 
+ shares/sum(shares) over (partition by year) shares_perc,
+ reads, sum(comments) over (partition by year) comments_total, 
+ comments/sum(comments) over (partition by year) comments_perc
 from (
-select a.publicationyear year, t.tag, sum(reads) reads, sum(comments) comments, sum(shares) shares
-from oplatek.artpop_articlepopularity f
-join oplatek.artpop_article a on f.keyarticle = a.keyarticle
-join oplatek.artpop_tag t on t.tag in ('positive', 'negative')
-join oplatek.artpop_articletags artt on a.keyarticle = artt.keyarticle and artt.keytag = t.keytag 
-group by a.publicationyear, t.tag
-order by year desc, tag
-)
+ select a.publicationyear year, t.tag, sum(reads) reads, 
+  sum(comments) comments, sum(shares) shares
+ from oplatek.artpop_articlepopularity f
+ join oplatek.artpop_article a on f.keyarticle = a.keyarticle
+ join oplatek.artpop_tag t on t.tag in ('positive', 'negative')
+ join oplatek.artpop_articletags artt 
+  on a.keyarticle = artt.keyarticle and artt.keytag = t.keytag 
+ group by a.publicationyear, t.tag
+ order by year desc, tag
+);
 \end{lstlisting}
 \item   Top 100 tags by article count in Business category in 2011.
 \begin{lstlisting}[language=sql] 
-select rank() over (order by count(a.keyarticle) desc) rank, t.tag, count(a.keyarticle) articles
+select rank() over (order by count(a.keyarticle) desc) rank, 
+ t.tag, count(a.keyarticle) articles
 from oplatek.artpop_articlepopularity f
-join oplatek.artpop_article a on f.keyarticle = a.keyarticle and a.category = 'Business' and a.publicationyear = 2011
+join oplatek.artpop_article a 
+ on f.keyarticle = a.keyarticle 
+ and a.category = 'Business' and a.publicationyear = 2011
 join oplatek.artpop_tag t on 1=1
-join oplatek.artpop_articletags artt on a.keyarticle = artt.keyarticle and artt.keytag = t.keytag
+join oplatek.artpop_articletags artt 
+ on a.keyarticle = artt.keyarticle and artt.keytag = t.keytag
 group by t.tag
-order by rank, tag asc
+order by rank, tag asc;
 \end{lstlisting}
 \end{enumerate}
 % subsection Article  queries (end)
@@ -226,9 +240,9 @@ from
 advert_advertisement aa
 join advert_date ad on aa.keydate = ad.keydate
 group by ad.YEAR;
-  \end{lstlisting}
+\end{lstlisting}
 \item    CPM(Clicks divided by displays) for top 10 advertisers by revenue together with avg CPM for advertisers category having the advertiser at least 15 campaigns
-  \begin{lstlisting}[language=sql] 
+\begin{lstlisting}[language=sql] 
 select *
 from 
 ( select
@@ -310,7 +324,6 @@ from (
   group by ad.month,ad.year, ac.name,ac.advertisercategory
   )
 order by y desc, c, popularity desc, n;
-
   \end{lstlisting}
 \end{enumerate}
 % section Business queries (end)

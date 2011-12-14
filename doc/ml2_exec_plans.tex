@@ -12,8 +12,13 @@ implement materialised views for queries number $3$ $4$ and $7$ from Subscriptio
 
  The group by sets needed to answer all 3 queries are represented by all nodes except the node representing the finest granularity (the top most) in lattice on Figure~\ref{fig:lattice}. (So we do not marked there).
 
+All of 3 queries use aggregation function below over groups specified in Table~\ref{t:groupby}.
+\begin{lstlisting}[language=sql] 
+sum( price * (1-discount ) * quantity )
+\end{lstlisting}
+
 \begin{figure}[!hbp]
-\caption{\label{t:attrib}Attributes in group by statement from our 3 queries}
+\caption{\label{t:groupby}Attributes in group by statement from our 3 queries}
 \begin{center}
 \begin{tabular}{|p{3cm}|p{3cm}|p{5cm}|}
 \hline
@@ -25,20 +30,64 @@ Country & City, State  & State, Country, Month\\
 \end{tabular}
 \end{center}
 \end{figure}
+
  All views which has at least the same level of aggregation as our chosen 3 queries are relevant candidates for materialised views. Unfortunately, our 3 queries covers almost whole lattice which represents the level of aggregation so we have to decide among large number of candidates.
 
-Let us firstly present some numbers.
-\begin{itemize}
-    \item Subscription fact table has 44632 rows
-    \item Join of fact table and {\it location} dimension has 4463200 rows (all queries)
-    \item Join of fact table and {\it date} dimension 163085328          (query 7)
-\end{itemize}
-Size of one rows on disc space is:
-http://askanantha.blogspot.com/2008/12/script-for-getting-oracle-table-size.html
-\begin{itemize}
-    \item 
-\end{itemize}
-We have decided to use materialised
+We have created several materialised views using syntax from Snippet~\ref{s:views}.
+Note that other views are created by the same snippet just altering the $group by$ statement
+as we tried to suggest by the comments in the snippets.
+
+\begin{figure}[!hbp]
+\begin{lstlisting}[language=sql] 
+create materialized view view_s_m 
+build immediate  
+-- disable CBO rewriting the queries by itself using this view
+disable query rewrite 
+as 
+ select sum( s.price * (1-s.discount)  * s.quantity )  
+ from sub_subscription s
+ join sub_date d on s.keyDate = d.keyDate
+ join sub_location l on s.keyLocation = l.keyLocation
+ group by d.month, l.state; --view_s_m
+ -- group by d.month; --view_m
+ -- group by l.city; --view_ci
+ -- group by l.country; --view_co
+
+\end{lstlisting}
+\caption{\label{s:views}  Creating materialised views}
+\end{figure}
+
+We have decided to create 3 materialised views denoted in Figure~\ref{fig:lattice}
+by a snowflake and in the snippet ~\ref{s:views} the 3 comment out group by statements represent 
+our materialised views. Note that group by statement  $view_co$ in the snippet 
+corresponds to node ${Co}$ in the lattice. See the lattice legend to find out that ${Co}$ means that
+the view is grouped by a country.
+
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+View & Size$[MB]$& Query 3$[s]$ & Query 4$[s]$ & Query 7$[s]$\\
+\hline
+\hline
+No view & 0 & TODO & TODO & TODO\\
+$\{S,M\}$ & TODO & TODO & TODO & TODO\\
+$\{M\}$ & TODO & TODO & TODO & TODO\\
+$\{S\}$ & TODO & TODO & TODO & TODO\\
+$\{Co\}$ & TODO & TODO & TODO & TODO\\
+\hline
+\end{tabular}
+
+%Let us firstly present some numbers.
+%\begin{itemize}
+%    \item Subscription fact table has 44632 rows
+%    \item Join of fact table and {\it location} dimension has 4463200 rows (all queries)
+%    \item Join of fact table and {\it date} dimension 163085328          (query 7)
+%\end{itemize}
+%Size of one rows on disc space is:
+%http://www.datadisk.co.uk/html_docs/oracle/views.htm
+%\begin{itemize}
+%    \item 
+%\end{itemize}
+%We have decided to use materialised
 
 \begin{figure}[!hbp]
 \begin{center}
