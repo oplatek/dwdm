@@ -85,7 +85,8 @@ from (
 right outer join (
   select distinct aa.category, aa.subcategory
   from oplatek.artpop_article aa
-) b on (a.category = b.category and a.subcategory = b.subcategory)
+) b 
+on (a.category = b.category and a.subcategory = b.subcategory)
 order by category, subcategory;
 \end{lstlisting}
 \end{itemize}
