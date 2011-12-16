@@ -6,6 +6,7 @@ CREATE TABLE sub_Date
    Month smallint NOT NULL,
    Year smallint NOT NULL,
    Week smallint NOT NULL,
+   DayOfWeek smallint NOT NULL, /* 1 - Monday, 7 - Sunday */
    Thanksgiving CHAR(1) CHECK (Thanksgiving IN ( 'Y', 'N' )),
    Halloween CHAR(1) CHECK (Halloween IN ( 'Y', 'N' )),
    Easter CHAR(1) CHECK (Easter IN ( 'Y', 'N' )),
@@ -28,17 +29,19 @@ CREATE TABLE sub_Period
 (
   keyPeriod integer NOT NULL,
   Name VARCHAR(256) NOT NULL,
+  "Order" smallint NOT NULL,
   PRIMARY KEY (keyPeriod)
 );
 
 CREATE TABLE sub_Subscription
 (
+   id integer NOT NULL,
    keyDate integer REFERENCES sub_Date(keyDate) NOT NULL,
    keyLocation integer REFERENCES sub_Location(keyLocation) NOT NULL,
    keyPeriod integer REFERENCES sub_Period(keyPeriod) NOT NULL,
    Quantity smallint NOT NULL,
    Price numeric(5,2) NOT NULL,
    Discount numeric(6,5) NOT NULL,
-   PRIMARY KEY (keyDate, keyLocation, keyPeriod)
+   PRIMARY KEY (id)
 );
 
