@@ -1,7 +1,7 @@
 \subsection*{Subscription queries} % (fold)
 \label{sub:Subscription business queries}
 \begin{enumerate}
-  \item Revenue from subscriptions by year.
+  \item Revenue from subscriptions by year?
 \begin{lstlisting}[language=sql]
 select sum(price * (1-discount) * quantity) revenue, d.year 
 from sub_subscription s 
@@ -18,7 +18,7 @@ join oplatek.sub_period p on s.keyperiod = p.keyperiod
 group by d.year, p.name
 order by year desc, subscriptions desc;
 \end{lstlisting}
-  \item Revenue from subscriptions and subscription count by country in 2010.
+  \item Revenue from subscriptions and subscription count by country in 2010?
 \begin{lstlisting}[language=sql]
 select l.country, sum(price * (1-discount) * quantity) revenue, 
   sum(quantity) subscriptions 
@@ -28,7 +28,7 @@ join oplatek.sub_date d on s.keydate=d.keydate and d.year=2010
 group by l.country 
 order by revenue desc;
 \end{lstlisting}
-  \item Top 10 cities from each country with the highest revenue from subscriptions in 2010.
+  \item Top 10 cities from each country with the highest revenue from subscriptions in 2010?
 \begin{lstlisting}[language=sql]  
 select * from (select country, city, 
   sum(price * (1-discount) * quantity) revenue, 
@@ -56,7 +56,7 @@ select year, period, revenue, revenue_no_discounts,
      group by d.year, p.name)
 order by year desc, period asc;
 \end{lstlisting}
-  \item Number of sales on different holidays by period in Canada in 2010.
+  \item Number of sales on different holidays by period in Canada in 2010?
 \begin{lstlisting}[language=sql] 
 TODO
 select country, year, period, total_sales, 
@@ -77,7 +77,7 @@ select country, year, period, total_sales,
        group by l.country, d.year, p.name)
 order by d.year, period;
 \end{lstlisting}
-  \item Revenue by month and by state in Canada in 2010 together with average revenue by states in Canada in the same month.
+  \item Revenue by month and by state in Canada in 2010 together with average revenue by states in Canada in the same month?
 \begin{lstlisting}[language=sql] 
 select l.state, d.month, 
   sum(price * (1-discount) * quantity) revenue,
@@ -99,7 +99,7 @@ order by state asc, month asc;
 \subsection*{Article queries} % (fold)
 \label{sub:Article  queries}
 \begin{enumerate}
-\item    Top 10 read articles and their authors for every month in year 2011.
+\item    Top 10 read articles and their authors for every month in year 2011?
 \begin{lstlisting}[language=sql] 
 select * from (
  select d.month, a.keyarticle as id, 
@@ -113,7 +113,7 @@ select * from (
  order by month asc, reads desc
 ) where rank <= 10;
 \end{lstlisting}
-\item    Hours of the day when most articles are read grouped by category in year 2010 together with the average number of articles read during this hour in the same year.
+\item    Hours of the day when most articles are read grouped by category in year 2010 together with the average number of articles read during this hour in the same year?
 \begin{lstlisting}[language=sql] 
 select a.category, d.hour, sum(reads) reads, 
     avg(sum(reads)) over (partition by hour) avg_reads 
@@ -124,7 +124,7 @@ join oplatek.artpop_date d on f.keydate = d.keydate
 group by a.category, d.hour
 order by a.category asc, d.hour asc;
 \end{lstlisting}
-\item    Number of articles published in each subcategory in year 2010 together with the % of total articles in the category.
+\item    Number of articles published in each subcategory in year 2010 together with the percentage of total articles in the category?
 \begin{lstlisting}[language=sql] 
 select category, subcategory, 
  articles/sum(articles) over (partition by category) perct, 
@@ -139,7 +139,7 @@ select category, subcategory,
   order by category, subcategory
  );
 \end{lstlisting}
-\item    Top 5 authors in every category by comments on their articles.
+\item    Top 5 authors in every category by comments on their articles?
 \begin{lstlisting}[language=sql] 
 select * from (
 select a.category, a.author, sum(comments) comments, 
@@ -151,7 +151,7 @@ group by a.category, a.author
 order by a.category asc, comments desc
 ) where rank <= 5;
 \end{lstlisting}
-\item    Each author's 5 most read articles with the number of total article reads together with the average number of article reads for this author's department and each author must have at least 20 articles published, all these articles must have been published before 2011 and total reads for each article must be above the average article read count for the author's department.
+\item    Each author's 5 most read articles with the number of total article reads together with the average number of article reads for this author's department and each author must have at least 20 articles published, all these articles must have been published before 2011 and total reads for each article must be above the average article read count for the author's department?
 \begin{lstlisting}[language=sql] 
 select *
 from (select a.author, 
@@ -172,7 +172,7 @@ order by a.author, rank asc)
 where rank <= 5 and reads > deparment_reads 
 and total_articles >= 20;
 \end{lstlisting}
-\item    Top 20 articles published in October, 2011 with the \#comments/\#reads higher than the average \#comments/\#reads having at least 20000 \#reads.
+\item    Top 20 articles published in October, 2011 with the \#comments/\#reads higher than the average \#comments/\#reads having at least 20000 \#reads?
 \begin{lstlisting}[language=sql] 
 select * from (
 select a.keyarticle id, a.title,
@@ -188,7 +188,7 @@ order by comm_by_reads - avg_comm_by_reads desc
 ) where comm_by_reads > avg_comm_by_reads 
 and reads >= 20000 and rownum <= 20
 \end{lstlisting}
-\item    Compare the number of reads/shares/comments of articles tagged with positive and negative tags for each year.
+\item    Compare the number of reads/shares/comments of articles tagged with tags 'positive' and 'negative' for each year?
 \begin{lstlisting}[language=sql] 
 select year, tag, reads, 
  sum(reads) over (partition by year) reads_total, 
@@ -209,7 +209,7 @@ from (
  order by year desc, tag
 );
 \end{lstlisting}
-\item   Top 100 tags by article count in Business category in 2011.
+\item   Top 100 tags by article count in Business category in 2011?
 \begin{lstlisting}[language=sql] 
 select rank() over (order by count(a.keyarticle) desc) rank, 
  t.tag, count(a.keyarticle) articles
@@ -230,7 +230,7 @@ order by rank, tag asc;
 \label{sub:Advertisement queries}
 
 \begin{enumerate}
-\item    Revenue by year together with average revenue in all years together with revenue in this year and together with next year
+\item {\bf todo compare revenue in past years} Revenue by year together with average revenue in all years together with revenue in this year and together with next year?
 \begin{lstlisting}[language=sql] 
 select ad.Year, sum(aa.revenue), 
   avg(sum(aa.revenue)) over () as total_avg,
@@ -241,7 +241,7 @@ advert_advertisement aa
 join advert_date ad on aa.keydate = ad.keydate
 group by ad.YEAR;
 \end{lstlisting}
-\item    CPM(Clicks divided by displays) for top 10 advertisers by revenue together with avg CPM for advertisers category having the advertiser at least 15 campaigns
+\item    CPM(Clicks divided by displays) for top 10 advertisers by revenue together with avg CPM for advertisers category having the advertiser at least 15 campaigns?
 \begin{lstlisting}[language=sql] 
 select *
 from 
@@ -266,7 +266,7 @@ from
 where 
 top < 10;
 \end{lstlisting}
-\item Revenue by advertiser from "Small Fish" category who has greater revenue than average of the "Middle Fish"*bias=0.5 together with average of "Middle Fish" advertisers  
+\item Revenue by advertiser from "Small Fish" category who has greater revenue than average of the "Middle Fish" bias=0.5 together with average of "Middle Fish" advertisers? 
   \begin{lstlisting}[language=sql] 
 select ac.advertiserName, ac.advertiserCategory, sum(aa.revenue), 
  avg(sum(aa.revenue)) over (partition by ac.advertiserCategory) 
@@ -295,7 +295,7 @@ having sum(aa.revenue) > 0.5* (
   where aac.advertiserCategory = 'Medium Fish'   
   group by aac.advertiserName,aac.advertiserCategory);
   \end{lstlisting}
-\item    The Campaigns which touched more than 5 month with maximum revenue in one month bigger than 140 all in year 2011 
+\item    The Campaigns which lasted more than 5 month with revenue bigger than 140 at least in one from the 5 month, all in year 2011?
   \begin{lstlisting}[language=sql] 
 select * from (
   select ac.name, max(sum(aa.revenue)) 
@@ -310,14 +310,15 @@ select * from (
     and (max(ad.day) - min(ad.day)) >=0 )
 ) where max_revenue_over_month > 140;
   \end{lstlisting}
-\item Most popular campaigns by year together with their popularity(clicks+displays) and  avg CPM per month
+\item Most popular campaigns by year together with their popularity(clicks+displays) and  avg CPM per month?
   \begin{lstlisting}[language=sql] 
 select y, c, n, popularity, cpm_per_month
 from (
   select ad.year y, ac.name n, ad.month, ac.advertisercategory c
   , sum(aa.clicks+aa.displays) popularity
   ,(avg(sum(aa.clicks)/sum(aa.displays)) 
-    over (partition by ad.month)) cpm_per_month 
+    over (partition by ad.month order by ad.month 
+    rows between 1 preceding and 1 following)) cpm_per_month
   from advert_advertisement aa
   join advert_date ad on ad.keyDate = aa.keyDate
   join advert_campaign ac on ac.keyCampaign = aa.keyCampaign
