@@ -62,18 +62,45 @@ select l.state, d.month,
   /* avg_revenue_in_this_month_across_all_states */
   avg(sum(price * (1-discount) * quantity)) 
     over (partition by month) avg_rev 
-from oplatek.sub_subscription s 
-join oplatek.sub_location l 
+from sub_subscription s 
+join sub_location l 
     on s.keylocation = l.keylocation and l.country = 'Canada' 
-join oplatek.sub_date d 
+join sub_date d 
     on s.keydate = d.keydate and d.year = 2010
-where length(l.state) = 2
 group by l.state, d.month
-order by state asc, month asc;
+order by state asc, month asc
 \end{lstlisting}
+
+In addition to in the previously mentioned indexes, there should be an index $sub\_location(country)$ since the $sub\_location$ table is filtred by the column $country$. Since there is a limited number of countries (in our warehouse around 20 and in total around 194), a bitmap index can be considered.
 
 \subsection*{Task} 
 Measure the queries performance using indexes and compare it to the
-performance without indexes. Discuss the execution plans.\newline
+performance without indexes. Discuss the execution plans.
+
+\subsection*{Subscription revenue by country} 
+This query takes 0.604s to run without any indexes. Since there are not many rows in the dimension tables (730 date tuples and 240 location tuples), Oracle performs a full table scan on them. A full table scan is also performed on the fact table since all of its data must be aggregated.
+
+$execution plan no indexes.png$
+
+After introducing the $sub\_subscription(keyLocation)$ and $sub\_subscription(keyDate)$ indexes ($sub\_date(keyDate)$ and $sub\_location(keyLocation)$ were already primary keys) query time didn't change and the execution plan was the same.
+
+After introducing the $sub\_date(year)$ bitmap index, query time didn't improve but the execution plan shows that it's being used. After seeing no changes, a B-tree index was tried instead, but it didn't have any impact on neither the execution time nor the execution plan.
+
+$execution plan bitmap index.png$
+
+It was concluded that introducing indexes for this query didn't bring any improvements due to the fact that there are few rows in the dimension tables. In a real world scenario, there still wouldn't be many rows in these two dimension tables and an index wouldn't improve the performance significally.
+
+\subsection*{Subscription revenue by state and month} 
+This query takes 0.167s to run without any indexes.
+
+$execution plan no indexes.png$
+
+After introducing the $sub\_subscription(keyLocation)$ and $sub\_subscription(keyDate)$ indexes ($sub\_date(keyDate)$ and $sub\_location(keyLocation)$ were already primary keys) query time improved by 100ms and the query took on average 0.068s to run.
+
+$execution plan indexes.png$
+
+After introducing the $sub\_location(country)$ bitmap index, query time didn't improve but the execution plan shows that it's being used. After seeing no changes, a B-tree index was tried instead, but it didn't have any impact on neither the execution time nor the execution plan.
+
+It was concluded that only the $sub\_subscription(keyLocation)$ index was responsible for reducing the query time by 100ms.
 
 \noindent ...
