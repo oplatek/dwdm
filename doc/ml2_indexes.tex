@@ -51,7 +51,7 @@ order by revenue desc
 \end{lstlisting}
 
 There should be B-tree indexes $sub\_subscription(keyLocation)$, $sub\_location(keyLocation)$, $sub\_subscription(keyDate)$, $sub\_date(keyDate)$ to avoid a full table scan when joining two tables. 
-Bitmap indexes are not suitable for this since there are many possible values and such a bitmap index would take up much more space. Assuming 1 million distinct tuples, the B-tree index size would be 21.48 MB (vs 30.52 GB for bitmap indexes). In a B-tree index for every tuple insertion time complexity is $O(log n)$\footnote{\url{http://en.wikipedia.org/wiki/B-tree}}
+Bitmap indexes are not suitable for this since there are many possible values and such a bitmap index would take up much more space. Assuming 1 million distinct tuples, the B-tree index size would be 21.48 MB (vs 30.52 GB for bitmap indexes). In a B-tree index for every tuple insertion time complexity is $O(log(n))$\footnote{\url{http://en.wikipedia.org/wiki/B-tree}}
 
 There should be an index $sub\_date(year)$ so that it can be used when data is filtered by year. Assuming 365 days per year and 100 years $\rightarrow$ 36500 tuples. Assuming the total number of distinct values is 100 (covering 100 years), it is reasonable to consider bitmap indexes for this index. A bitmap index would take up 7.129 MB, while a B-tree index would take up 0.07 MB of disk space. While a bitmap index has a 100x larger space overhead, it is negligible on modern systems. Considering the fact that other columns of the table $sub\_date$ are perfect candidates for bitmap indexes (such as holiday columns: Christmas - yes/no) and the fact that multiple bitmap indexes can be used together to speed up joins, it is reasonable to choose a bitmap index.
 
