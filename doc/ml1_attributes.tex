@@ -1,10 +1,11 @@
+
 Most of the attributes have self explanatory name.
-Possibly, the only exception is {\it Period} dimension in {\it Subscription} fact. The {\it Period} describes different types of subscriptions based on how long the subscription last. 
+Possibly, the only exception is {\it Period} dimension in {\it Subscription} fact. The {\it Period} describes different types of subscriptions based on how long the subscription last, e.g. month, quarter, annual. The {\it Period} has attached descriptive attribute {\it Order}, which it describes the ordering according length, e.g. month has order $1$, quarter has order $2$, etc. 
 
 We managed to get all data which fit our hierarchies completely, so we do not have any optional attributes nor we use any convergences. 
 
 \subsection*{Article popularity attributes} 
-The biggest hierarchy is in {\it Article title}, which has attached hierarchies of {\it Subcategory}, {\it Category} and the hierarchy {\it Day}, {\it Month}, {\it Year} together with {\it Author} hierarchy. The {\it Date} hierarchy in {\it Article} dimension represents publication date.
+The biggest hierarchy is in {\it Article}, which has attached hierarchies of {\it Subcategory}, {\it Category} and the hierarchy {\it Day}, {\it Month}, {\it Year} together with {\it Author} hierarchy. The {\it Date} hierarchy in {\it Article} dimension represents publication date. We use the descriptive attribute {\it Title} of {\it Article} to represent one article further on.
 
 We decided to completely separate dimension {\it Day of week} from {\it Time} dimension, because we have no interest in rolling up using {\it Day of week}.
 

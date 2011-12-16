@@ -1,25 +1,22 @@
 \subsubsection{Ranking queries} % (fold)
-\label{ssub:Ranking queries}
+\label{sub:ranking}
 We have enclosed our ranking queries in list of business queries at Subsection~\ref{sec:ml2_queries}.
 See queries Subscription query number $4$, from Article queries numbers $2$, $4$, $5$
 and query $2$ from Advertisement section
 % subsubsection Ranking queries (end)
 
-\subsection{Windowin queries} % (fold)
-\label{sub:Windowin queries}
-Number of windowing queries (queries using windowing functions with the"{\it OVER}" statement)
-could be found also Subsection~\ref{sec:ml2_queries}.
-Let us name queries $2$ and $5$ from Article section or queries $1$, $2$, $3$, $4$ from Advertisement part.
-% subsection Windowin queries (end)
+\subsection{Windowing queries} 
+\label{sub:windowing}
+We used windowing queries in $1$ and $5$ queries in Advertisement part from Subsection~\ref{sec:ml2_queries}.
 
 \subsection{Period-to-Period queries} % (fold)
-\label{sub:Period-to-Period queries}
+\label{sub:period2period}
 %    \begin{itemize}
 %        \item Difference between number of reads of article on the publication date and the date in one week and the date in 2 weeks
 %        \item Total revenue from subscriptions in last 3 years
 %    \end{itemize}
 \begin{itemize}
-    \item Revenue from subscriptions by year and week compared to the revenue on the same week in the previous year.
+    \item Revenue from subscriptions by year and week compared to the revenue on the same week in the previous year?
 \begin{lstlisting}[language=sql] 
 select year, week, revenue, 
  sum(revenue) over (partition by week order by year 
@@ -34,7 +31,7 @@ from (
 order by year desc, week asc;
 \end{lstlisting}
 
-\item Revenue from subscriptions by year and week compared to the average revenue on the same week in the 3 previous years.
+\item Revenue from subscriptions by year and week compared to the average revenue on the same week in the 3 previous years?
 \begin{lstlisting}[language=sql] 
 select year, week, revenue, avg(revenue) 
  over (partition by week order by year 
@@ -55,7 +52,7 @@ order by year desc, week asc;
 \subsection{Dense reports} % (fold)
 \label{sub:Dense reports}
 \begin{itemize}
-\item Revenue from subscriptions by year.
+\item Revenue from subscriptions by year?
 \begin{lstlisting}[language=sql] 
 select b.year, NVL(revenue, 0)  dense_revenue from (
 select year, sum(price * (1-discount) * quantity) revenue 
@@ -71,7 +68,7 @@ right outer join (
 order by b.year desc;
 \end{lstlisting}
 
-\item Number of articles published in 1999 in each category.
+\item Number of articles published in 1999 in each category?
 \begin{lstlisting}[language=sql] 
 select b.category, b.subcategory, NVL(articles,0) dense_articles 
 from (

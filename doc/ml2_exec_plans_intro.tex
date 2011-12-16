@@ -1,7 +1,11 @@
 
-We have chosen fact Subscription for implementing materialiesed views and indexes.
+We have chosen fact Subscription for implementing materialized views and indexes.
 We will implement materialised views for queries number $3$ $4$ and $7$ from Subscription part of Section~\ref{sec:ml2_queries}.
-    
- We have chosen this fact because they use "where" clause on columns with no indexes so implementing indexes will result in better performance.
+
+The three above mentioned queries are good candidates for materialized view because they aggregate heavily and gives relative small results based on lot of data.
+   
+Also for indexes is this fact interesting because the queries $3$ and $4$ use "where" clause on columns with no indexes so implementing indexes will result in better performance.
  
 Last but definitely not least, we suppose that Subscription fact would be the most queried fact from our data warehouse.
+
+It is worth to mention that we decided to choose third query for impementing indexes for fact article popularity to see the difference. The main reason is the fact has $1 672 252$ rows, so should be able to see the performance improvement easily.
