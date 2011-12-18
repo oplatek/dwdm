@@ -71,7 +71,22 @@ group by l.state, d.month
 order by state asc, month asc
 \end{lstlisting}
 
-In addition to in the previously mentioned indexes, there should be an index $sub\_location(country)$ since the $sub\_location$ table is filtred by the column $country$. Since there is a limited number of countries (in our warehouse around 20 and in total around 194), a bitmap index can be considered.
+In addition to in the previously mentioned indexes, there should be an index $sub\_location(country)$ since the $sub\_location$ table is filtred by the column $country$. Since there is a limited number of countries (in our warehouse around 20 and in total around 194), both B-tree and bitmap indexes can be used. As with the dates discussed previously, the number of total distinct tuples in the $sub_location$ table in the real world would be tens of thousands. While a bitmap index would take up 100x more space than a B-tree index, the size of the index is negligible.
+
+\subsection*{Articles by reads and comments} 
+\begin{lstlisting}[language=sql] 
+select a.keyarticle id, a.title,
+   sum(reads)/sum(comments) comm_by_reads,
+   avg(sum(reads)/sum(comments)) over () avg_comm_by_reads,
+   sum(reads) reads
+from oplatek.artpop_articlepopularity f
+join oplatek.artpop_article a on f.keyarticle = a.keyarticle
+where a.publicationyear = 2011 and a.publicationmonth = 10
+group by a.keyarticle, a.title
+order by comm_by_reads - avg_comm_by_reads desc
+\end{lstlisting}
+
+There should be B-tree indexes of $artpop\_articlepopularity(keyArticle)$ and $artpop\_article(keyArticle)$ to speed up the join. Additionally, in theory there should be two different indexes of $artpop\_article(publicationYear)$ and $artpop\_article(publicationMonth)$ or one composite index of $artpop\_article(publicationYear, publicationMonth)$ to speed up filtering articles. Since there can be hundreds of thousands of articles, a bitmap index is not feasible, as it would take a lot of space (assuming 1 million articles, a B-tree index 21.48 MB vs a bitmap index 30.52 GB). Also, there are not many columns in the article popularity dimensions that would be able to advantage of the fast bitmap index intersection.
 
 \subsection*{Task} 
 Measure the queries performance using indexes and compare it to the
