@@ -100,7 +100,7 @@ This query takes 0.604s to run without any indexes. Since there are not many row
 
 \begin{figure}[!htp]
 \begin{center}
-  \includegraphics[scale=0.45]{execplans_q1_no_indexes}
+  \includegraphics[scale=0.5]{execplans_q1_no_indexes}
 \end{center}
 \end{figure}
 
@@ -110,7 +110,7 @@ After introducing the $sub\_date(year)$ bitmap index, query time didn't improve 
 
 \begin{figure}[!htp]
 \begin{center}
-  \includegraphics[scale=0.45]{execplans_q1_year_bitmap}
+  \includegraphics[scale=0.5]{execplans_q1_year_bitmap}
 \end{center}
 \end{figure}
 
@@ -123,19 +123,19 @@ This query takes 0.167s to run without any indexes.
 
 \begin{figure}[!htp]
 \begin{center}
-  \includegraphics[scale=0.45]{execplans_q2_no_indexes}
+  \includegraphics[scale=0.5]{execplans_q2_no_indexes}
 \end{center}
 \end{figure}
 
 After introducing the $sub\_subscription(keyLocation)$ and $sub\_subscription(keyDate)$ indexes ($sub\_date(keyDate)$ and $sub\_location(keyLocation)$ were already primary keys) query time improved by 100ms and the query took on average 0.068s to run.
 
-\begin{figure}[!htp]
+After introducing the $sub\_location(country)$ bitmap index, query time didn't improve but the execution plan shows that it's being used. After seeing no changes, a B-tree index was tried instead, but it didn't have any impact on neither the execution time nor the execution plan.
+
+\begin{figure}[!hbp]
 \begin{center}
-  \includegraphics[scale=0.45]{execplans_q2_join}
+  \includegraphics[scale=0.5]{execplans_q2_join}
 \end{center}
 \end{figure}
-
-After introducing the $sub\_location(country)$ bitmap index, query time didn't improve but the execution plan shows that it's being used. After seeing no changes, a B-tree index was tried instead, but it didn't have any impact on neither the execution time nor the execution plan.
 
 It was concluded that only the $sub\_subscription(keyLocation)$ index was responsible for reducing the query time by 100ms.
 

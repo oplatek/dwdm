@@ -56,15 +56,14 @@ select year, period, revenue, revenue_no_discounts,
      group by d.year, p.name)
 order by year desc, period asc;
 \end{lstlisting}
-  \item Number of sales on different holidays by period in Canada in 2010?
+  \item Comparison of the number of sales on Christmas and Easter by period in Canada in 2010?
 \begin{lstlisting}[language=sql] 
-TODO
-select country, year, period, total_sales, 
-(select sum(quantity) from 
+select sum(quantity) from 
     oplatek.sub_subscription ss, oplatek.sub_date dd 
- where ss.keydate = dd.keydate and dd.christmas = 'Y' 
+ where ss.keydate = dd.keydate and dd.Easter = 'Y' 
   and ss.keyperiod = p.keyperiod 
-  and ss.keylocation = l.keylocation) as christmas,
+  and ss.keylocation = l.keylocation) as easter,
+select country, year, period, total_sales, 
  from (select l.country, d.year, 
          p.name period, sum(quantity) total_sales
        from oplatek.sub_subscription s 
@@ -230,7 +229,7 @@ order by rank, tag asc;
 \label{sub:Advertisement queries}
 
 \begin{enumerate}
-\item {\bf todo compare revenue in past years} Revenue by year together with average revenue in all years together with revenue in this year and together with next year?
+\item Revenue by year together with average revenue in all years together with revenue in this year and together with last year?
 \begin{lstlisting}[language=sql] 
 select ad.Year, sum(aa.revenue), 
   avg(sum(aa.revenue)) over () as total_avg,
