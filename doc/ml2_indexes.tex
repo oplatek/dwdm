@@ -141,4 +141,8 @@ It was concluded that only the $sub\_subscription(keyLocation)$ index was respon
 
 \subsection*{Articles by reads and comments}
 
-The proposed indexes didn't improve the execution time of the query.
+The query takes about 1 second to run mainly due to the fact that all articles are returned and selected in order to do an aggregation over all of the articles.
+
+The proposed indexes didn't improve the execution time of the query. Different combinations of indexes on $article$'s $publicationYear$ and $publicationDate$ were tried but yielded no performance improvement. Even adding indexes on all involved columns as well as combinations of them had no impact on the running time of the query.
+
+In conclusion, indexing doesn't seem to have any noticable effect on this query due to the fact that it's necessary to scan all rows in order to  calculate the average value. The only way to improve this query would be to rewrite it by removing the windowing function.
