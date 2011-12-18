@@ -23,5 +23,8 @@ ${NAME}.dvi: ${NAME}.tex $(wildcard *.tex)
 dia: $(wildcard images/*.dia)
 	images/dia2eps ./images
 
+png: $(wildcard images/*.png)
+	images/png2eps ./images
+
 clean:
 	rm -f *.log  *.dvi *.aux *.toc *.lof *.out ${NAME}.ps ${NAME}.pdf

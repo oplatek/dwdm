@@ -71,7 +71,7 @@ group by l.state, d.month
 order by state asc, month asc
 \end{lstlisting}
 
-In addition to in the previously mentioned indexes, there should be an index $sub\_location(country)$ since the $sub\_location$ table is filtred by the column $country$. Since there is a limited number of countries (in our warehouse around 20 and in total around 194), both B-tree and bitmap indexes can be used. As with the dates discussed previously, the number of total distinct tuples in the $sub_location$ table in the real world would be tens of thousands. While a bitmap index would take up 100x more space than a B-tree index, the size of the index is negligible.
+In addition to in the previously mentioned indexes, there should be an index $sub\_location(country)$ since the $sub\_location$ table is filtered by the column $country$. Since there is a limited number of countries (in our warehouse around 20 and in total around 194), both B-tree and bitmap indexes can be used. As with the dates discussed previously, the number of total distinct tuples in the $sub_location$ table in the real world would be tens of thousands. While a bitmap index would take up 100x more space than a B-tree index, the size of the index is negligible.
 
 \subsection*{Articles by reads and comments} 
 \begin{lstlisting}[language=sql] 
@@ -86,7 +86,10 @@ group by a.keyarticle, a.title
 order by comm_by_reads - avg_comm_by_reads desc
 \end{lstlisting}
 
-There should be B-tree indexes of $artpop\_articlepopularity(keyArticle)$ and $artpop\_article(keyArticle)$ to speed up the join. Additionally, in theory there should be two different indexes of $artpop\_article(publicationYear)$ and $artpop\_article(publicationMonth)$ or one composite index of $artpop\_article(publicationYear, publicationMonth)$ to speed up filtering articles. Since there can be hundreds of thousands of articles, a bitmap index is not feasible, as it would take a lot of space (assuming 1 million articles, a B-tree index 21.48 MB vs a bitmap index 30.52 GB). Also, there are not many columns in the article popularity dimensions that would be able to advantage of the fast bitmap index intersection.
+There should be B-tree indexes of $artpop\_articlepopularity(keyArticle)$ and \\ 
+$artpop\_article(keyArticle)$ to speed up the join. 
+Additionally, in theory there should be two different indexes of $artpop\_article(publicationYear)$ and\\
+$artpop\_article(publicationMonth)$ or one composite index of $artpop\_article(publicationYear, publicationMonth)$ to speed up filtering articles. Since there can be hundreds of thousands of articles, a bitmap index is not feasible, as it would take a lot of space (assuming 1 million articles, a B-tree index 21.48 MB vs a bitmap index 30.52 GB). Also, there are not many columns in the article popularity dimensions that would be able to advantage of the fast bitmap index intersection.
 
 \subsection*{Task} 
 Measure the queries performance using indexes and compare it to the
@@ -113,7 +116,7 @@ After introducing the $sub\_date(year)$ bitmap index, query time didn't improve 
 
 One possible explanation of the reason why Oracle in this case is not using a B-tree index is that Oracle has chosen an execution plan based on costs. Since there are few rows in the dimension tables, a full table scan is fast enough and there is no need to use an index. When this query is run on empty fact \& dimension tables, the execution plan shows that indexes would be used as there are is no data from which to estimate costs. It is also worth pointing out that it was observed that other database systems such as MySQL would use the proposed indexes in their execution plans.
 
-It was concluded that introducing indexes for this query didn't bring any improvements due to the fact that there are few rows in the dimension tables. In a real world scenario, there still wouldn't be many rows in these two dimension tables and an index wouldn't improve the performance significally.
+It was concluded that introducing indexes for this query didn't bring any improvements due to the fact that there are few rows in the dimension tables. In a real world scenario, there still wouldn't be many rows in these two dimension tables and an index wouldn't improve the performance significantly.
 
 \subsection*{Subscription revenue by state and month} 
 This query takes 0.167s to run without any indexes.
