@@ -103,6 +103,8 @@ After introducing the $sub\_date(year)$ bitmap index, query time didn't improve 
 
 $execution plan bitmap index.png$
 
+One possible explanation of the reason why Oracle in this case is not using a B-tree index is that Oracle has chosen an execution plan based on costs. Since there are few rows in the dimension tables, a full table scan is fast enough and there is no need to use an index. When this query is run on empty fact \& dimension tables, the execution plan shows that indexes would be used as there are is no data from which to estimate costs. It is also worth pointing out that it was observed that other database systems such as MySQL would use the proposed indexes in their execution plans.
+
 It was concluded that introducing indexes for this query didn't bring any improvements due to the fact that there are few rows in the dimension tables. In a real world scenario, there still wouldn't be many rows in these two dimension tables and an index wouldn't improve the performance significally.
 
 \subsection*{Subscription revenue by state and month} 
@@ -118,4 +120,6 @@ After introducing the $sub\_location(country)$ bitmap index, query time didn't i
 
 It was concluded that only the $sub\_subscription(keyLocation)$ index was responsible for reducing the query time by 100ms.
 
-\noindent ...
+\subsection*{Articles by reads and comments}
+
+The proposed indexes didn't improve the execution time of the query.
