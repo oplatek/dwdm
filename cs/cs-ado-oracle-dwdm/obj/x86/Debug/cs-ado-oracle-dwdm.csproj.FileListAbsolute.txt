@@ -1,0 +1,6 @@
+E:\work\unibz\dwdm\milestone\cs\cs-ado-oracle-dwdm\obj\x86\Debug\ResolveAssemblyReference.cache
+E:\work\unibz\dwdm\milestone\cs\cs-ado-oracle-dwdm\bin\Debug\cs-ado-oracle-dwdm.exe.config
+E:\work\unibz\dwdm\milestone\cs\cs-ado-oracle-dwdm\bin\Debug\cs-ado-oracle-dwdm.exe
+E:\work\unibz\dwdm\milestone\cs\cs-ado-oracle-dwdm\bin\Debug\cs-ado-oracle-dwdm.pdb
+E:\work\unibz\dwdm\milestone\cs\cs-ado-oracle-dwdm\obj\x86\Debug\cs-ado-oracle-dwdm.exe
+E:\work\unibz\dwdm\milestone\cs\cs-ado-oracle-dwdm\obj\x86\Debug\cs-ado-oracle-dwdm.pdb
