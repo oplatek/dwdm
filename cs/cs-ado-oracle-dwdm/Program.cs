@@ -113,11 +113,32 @@ class SqlConnectionDemo
         }
     }
 
+    static private void LoadXML2DataSet() {
+        string xmlpath = "E:/work/unibz/comp_lingvistics/project/wordnet-cz.xml";
+        DataSet xmlDataSet = new DataSet();
+
+        using (FileStream filestream = File.OpenRead(xmlpath)) {
+            using (BufferedStream buffered = new BufferedStream(filestream)) {
+                xmlDataSet.ReadXml(buffered);
+
+                Console.WriteLine(xmlDataSet.GetXmlSchema());
+                foreach (DataTable t in xmlDataSet.Tables) {
+                    Console.WriteLine("create table {0} (",t.TableName);
+                    foreach (DataColumn c in t.Columns) {
+                        Console.WriteLine("  {0} {1},", c.ColumnName, c.DataType.ToString());
+                    }
+                    Console.WriteLine(");");
+                }
+            }// end using
+        }// end using
+    }
     static void Main()
     {
         ReadSettings();
+
+        LoadXML2DataSet();
         // ConnectAndQuery();
-        PopulateDataSet();
+        //PopulateDataSet();
 
         // Debugging
         Console.WriteLine("pres enter to exit");
