@@ -2,31 +2,38 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.OracleClient;
+using System.IO;
 
 /// <summary>
 /// Demonstrates how to work with SqlConnection objects
 /// </summary>
 class SqlConnectionDemo
 {
-    private static string server = "alcor.inf.unibz.it";
-    private static string sid = "orcl";
-    private static string port = "1521";
-    private static string user = "oplatek";
-    private static string psswd = "Cu8naeHu";
-    private static string CONNECTION_STRING =
-  "User Id="+user+";Password="+psswd+";Data Source=(DESCRIPTION=" +
-  "(ADDRESS=(PROTOCOL=TCP)(HOST="+server+")(PORT="+port+"))"+
-  "(CONNECT_DATA=(SID="+sid+")));";
-
-    public static SqlConnectionDemo {
-        FileStream f = new todo ("settings.txt") ;
-        server 
-        sid
-        port
-        user = f.Readline();
-        psswd = f.ReadLine();
+    private static string settings_path="settings.txt";
+    private static string server;
+    private static string sid;
+    private static string port;
+    private static string user;
+    private static string psswd;
+    private static string CONNECTION_STRING;
+    
+    static void ReadSettings (){
+        using (FileStream f = new FileStream(settings_path, FileMode.Open)) {
+            using (StreamReader r = new StreamReader(f)) {
+                server = r.ReadLine();
+                sid = r.ReadLine();
+                port = r.ReadLine();
+                user = r.ReadLine();
+                psswd = r.ReadLine();
+                CONNECTION_STRING =
+            "User Id=" + user + ";Password=" + psswd + ";Data Source=(DESCRIPTION=" +
+            "(ADDRESS=(PROTOCOL=TCP)(HOST=" + server + ")(PORT=" + port + "))" +
+            "(CONNECT_DATA=(SID=" + sid + ")));";
+            }
+        }
+        Console.WriteLine(CONNECTION_STRING);
     }
-
+    
     static private void ConnectAndQuery()
     {
         string table = "sub_date";
@@ -105,53 +112,16 @@ class SqlConnectionDemo
                 connection.Close();
         }
     }
+
     static void Main()
     {
+        ReadSettings();
         // ConnectAndQuery();
         PopulateDataSet();
+
+        // Debugging
+        Console.WriteLine("pres enter to exit");
         Console.ReadLine();
-        /*
-        // 1. Instantiate the connection
-        SqlConnection conn = new SqlConnection(
-            "Data Source=(local);Initial Catalog=Northwind;Integrated Security=SSPI");
-
-        SqlDataReader rdr = null;
         
-        try
-        {
-            // 2. Open the connection
-            conn.Open();
-
-            // 3. Pass the connection to a command object
-            SqlCommand cmd = new SqlCommand("select * from Customers", conn);
-
-            //
-            // 4. Use the connection
-            //
-
-            // get query results
-            rdr = cmd.ExecuteReader();
-
-            // print the CustomerID of each record
-            while (rdr.Read())
-            {
-                Console.WriteLine(rdr[0]);
-            }
-        }
-        finally
-        {
-            // close the reader
-            if (rdr != null)
-            {
-                rdr.Close();
-            }
-
-            // 5. Close the connection
-            if (conn != null)
-            {
-                conn.Close();
-            }
-        }
-        */
     }
 }
