@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data.OracleClient;
 using System.IO;
@@ -113,30 +114,146 @@ class SqlConnectionDemo
         }
     }
 
-    static private void LoadXML2DataSet() {
+    static private void XML2ShowSchema(bool printSchema) {
         string xmlpath = "E:/work/unibz/comp_lingvistics/project/wordnet-cz.xml";
         DataSet xmlDataSet = new DataSet();
-
+        
         using (FileStream filestream = File.OpenRead(xmlpath)) {
             using (BufferedStream buffered = new BufferedStream(filestream)) {
                 xmlDataSet.ReadXml(buffered);
-
-                Console.WriteLine(xmlDataSet.GetXmlSchema());
+                if (printSchema) {
+                    Console.WriteLine(xmlDataSet.GetXmlSchema());
+                }
                 foreach (DataTable t in xmlDataSet.Tables) {
-                    Console.WriteLine("create table {0} (",t.TableName);
+                    Console.WriteLine("create table {0} (", t.TableName);
                     foreach (DataColumn c in t.Columns) {
                         Console.WriteLine("  {0} {1},", c.ColumnName, c.DataType.ToString());
-                    }
+                    }                            
                     Console.WriteLine(");");
-                }
+                }                                    
             }// end using
-        }// end using
+        }// end using        
     }
+
+    static private void XML2sql() {
+        string xmlpath = "E:/work/unibz/comp_lingvistics/project/wordnet-cz.xml";
+        DataSet xmlDataSet = new DataSet();
+        string sqlpath = "E:/downloads/xml2sql.sql";
+        string tablePrefix = "OP_CL_";
+        using (FileStream filestream = File.OpenRead(xmlpath)) {
+            using (BufferedStream buffered = new BufferedStream(filestream)) {
+                xmlDataSet.ReadXml(buffered);
+                StreamWriter w = new StreamWriter(sqlpath);
+                Console.WriteLine("Loading finished .. Writing started");
+                foreach (DataTable t in xmlDataSet.Tables) {                                        
+                    string insert_start = "INSERT INTO " + tablePrefix + t.TableName + " VALUES (";                        
+                    foreach (DataRow r in t.Rows) {
+                        w.Write(insert_start);
+                        int i;
+                        DataColumn c;
+                        for(i = 0; i < t.Columns.Count -1; ++i) {
+                            c = t.Columns[i];
+                            if (c.DataType.Equals(typeof(Int32))) {
+                                string s = r[c].ToString();
+                                if (s == "") {
+                                    w.Write("NULL");
+                                }
+                                else {
+                                    w.Write(s);
+                                }
+                            }
+                            else { 
+                                //string
+                                
+                                string s = r[c].ToString();
+                                if (s == "") {
+                                    w.Write("NULL");
+                                }
+                                else {
+                                    w.Write("'");
+                                    w.Write(s);
+                                    w.Write("'");
+                                }
+                            }
+                            
+                            w.Write(", ");
+                        }        
+                        // END FOR
+                        c = t.Columns[i];
+                        if (c.DataType.Equals(typeof(Int32))) {
+                            string s = r[c].ToString();
+                            if (s == "") {
+                                w.Write("NULL");
+                            }
+                            else {
+                                w.Write(s);
+                            }
+                        }
+                        else {
+                            //string
+
+                            string s = r[c].ToString();
+                            if (s == "") {
+                                w.Write("NULL");
+                            }
+                            else {
+                                w.Write("'");
+                                w.Write(s);
+                                w.Write("'");
+                            }
+                        }                        
+                        w.WriteLine(");");                                                
+                    }                    
+                }
+                w.Close();
+            }// end using
+        }// end using        
+    }
+
+
+    static private void LoadXML2DataSet(bool printSchema) {
+        string xmlpath = "E:/work/unibz/comp_lingvistics/project/wordnet-cz.xml";
+        string tablePrefix = "OP_CL_";
+        
+        using (FileStream filestream = File.OpenRead(xmlpath)) {
+            using (BufferedStream buffered = new BufferedStream(filestream)) {
+                DataSet xmlDataSet = new DataSet();
+                xmlDataSet.ReadXml(buffered);
+                
+                using (OracleConnection connection = new OracleConnection()) {                
+                    connection.ConnectionString = CONNECTION_STRING;
+                    connection.Open();
+                   
+                    foreach (DataTable t in xmlDataSet.Tables) {
+                        OracleDataAdapter oracleAdapter = new OracleDataAdapter();
+                        string table_name = tablePrefix + t.TableName;
+                        string sql_str = "INSERT INTO " + table_name + " VALUES (";                        
+                        foreach (DataColumn c in t.Columns) {
+                            sql_str = sql_str + "@" + c.ColumnName + ", ";
+                            bool intIs= c.DataType.Equals(typeof(Int32));
+                            oracleAdapter.InsertCommand.Parameters.Add("@" + c.ColumnName, 
+                                intIs ? OracleType.Number : OracleType.NVarChar, 
+                                intIs ? 2 : 255, c.ColumnName);
+
+                        }
+                        sql_str = sql_str.Substring(0, sql_str.Length - 2) + ");";
+
+                        Console.WriteLine(sql_str);
+                        oracleAdapter.InsertCommand = new OracleCommand(sql_str,connection);
+                        
+                        oracleAdapter.Update(t);
+                    }                    
+                } // end using oracle
+            }// end using
+        }// end using        
+    }
+
     static void Main()
     {
-        ReadSettings();
+        XML2sql();
+        //ReadSettings();
 
-        LoadXML2DataSet();
+        //LoadXML2DataSet(false);
         // ConnectAndQuery();
         //PopulateDataSet();
 

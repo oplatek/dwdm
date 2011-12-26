@@ -17,9 +17,9 @@ CREATE TABLE advert_Date
 CREATE TABLE advert_Campaign
 (
    keyCampaign integer NOT NULL,
-   Name VARCHAR(256) NOT NULL,
-   AdvertiserName VARCHAR(256) NOT NULL,
-   AdvertiserCategory VARCHAR(256) NOT NULL,
+   Name VARCHAR(255) NOT NULL,
+   AdvertiserName VARCHAR(255) NOT NULL,
+   AdvertiserCategory VARCHAR(255) NOT NULL,
    PRIMARY KEY (keyCampaign)
 );
 
