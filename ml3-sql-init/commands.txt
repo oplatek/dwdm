@@ -1,0 +1,7 @@
+#1) select bad month
+head -n 100000 git_log.sql |sed "s:.*to_date(::"|sed "s:SS').*:SS'):"|cut -d ' ' -f 1|sort|uniq|sed "s:'::">months.txt
+#2) repair it
+sed -e "s:'Dez:'Dec:g"  -e "s:'Mai:'May:g" -e "s:'Mrz:'Mar:g" -e "s:'Okt:'Oct:g" git_log.sql >git_log_better.sql
+#3) load to russel
+split -l 100000 git_log_better.sql
+for F in xa[a-z] ; do mv "$F" "$F.sql"; echo exit| sqlrussel "@$F" ; mv "$F.sql" "finished-$F.srl" ; done
