@@ -1,0 +1,33 @@
+\subsection{Android bugs preprocessing for Weka} % (fold)
+\label{sub:Android bugs preprocessing for Weka}
+\begin{itemize}
+    \item We created csv files
+    \item We ran unsuccessfully command
+\begin{lstlisting}[language=sh]
+$ java weka.core.converters.CSVLoader ANDROID_PLATFORM_BUGS.csv > ANDROID_PLATFORM_BUGS.arff
+\end{lstlisting}
+    \item so we design our own script
+    \item  We tried tried to convert strings attributes to vectors for 1000 most important words. Unfortunately, following command crashes.
+\begin{lstlisting}[language=sh]
+    java weka.filters.unsupervised.attribute.StringToWordVector -i android-platform-bugs.arff -o android_plat-bugs-Vectors.arff
+\end{lstlisting}
+    \item We found out that the script works if there only the string attributes so we generated
+    android-plat-strings.arff and android-plat-except-strings.arff
+    \item We split them manually on the data part and the header.
+    The headers we simply concatenated. On the data we applied following commands.
+\begin{lstlisting}[language=sh]
+nl -s " " -b a android-plat-except-strings.data # number lines
+nl -s " " -b a android-plat-strings.data # number lines
+sed s:\(......\) :\1 a : -f *except* > number-and-prefix-a
+sed s:\(......\) :\1 b : -f *strings* > number-and-prefix-b
+cat *strings* *except*> mixed.data
+sort -n data > sorted.data
+sed s:\n...... b :: -f sorted.data> joined-related-lines
+sed s:...... a :: -f joined-related-lines > without-prefix
+cat mixed-head without-prefix > android-plat-bugs2vectors.arff
+\end{lstlisting}
+
+    
+\end{itemize}
+
+% subsection Android bugs preprocessing for Weka (end)
