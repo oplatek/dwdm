@@ -41,13 +41,13 @@ namespace Dwdm
             {
                 sw.WriteLine("@relation bugs");
                 sw.WriteLine("@attribute id numeric");
-                //sw.WriteLine("@attribute title string");
+                sw.WriteLine("@attribute title string");
                 sw.WriteLine("@attribute status {" + string.Join(", ", bugs.Select(b => b.Status).Distinct()) + "}");
                 sw.WriteLine("@attribute type {" + string.Join(", ", bugs.Select(b => b.Type).Distinct()) + "}");
                 sw.WriteLine("@attribute priority {" + string.Join(", ", bugs.Select(b => b.Priority).Distinct()) + "}");
                 sw.WriteLine("@attribute stars numeric");
                 sw.WriteLine("@attribute comments numeric");
-                //sw.WriteLine("@attribute description string");
+                sw.WriteLine("@attribute description string");
                 sw.WriteLine("@attribute owner {" + string.Join(", ", bugs.Select(b => b.Owner).Distinct()) + "}");
                 sw.WriteLine("@attribute component {" + string.Join(", ", bugs.Select(b => b.Component).Distinct()) + "}");
                 sw.WriteLine();
