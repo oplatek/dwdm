@@ -21,7 +21,7 @@ Here is the available data about the bugs.
 \item Status - current status of the bug (Reviewed, New, Duplicate, Declined, NeedsInfo, FutureRelease, Released, Spam, Unreproducible, Question, WorkingAsIntended, Assigned, Unassigned, UserError)
 \item Priority - urgency of the bug to be fixed (Small, Medium, High, Critical, Blocker)
 \item Component - category of the bug based on which part of the system the bug affects
-\item Stars - user rating of the quality of the bug report
+\item Stars - number of people that have starred this bug (could be an indicator of popularity)
 \item Owner - assigned developer to fix  the bug
 \item Reported By - person who reported the bug
 \item Opened Date - when the bug was reported
@@ -32,7 +32,7 @@ It is also possible to aggregate the comments for a bug to determine additional 
 
 \begin{itemize}
 \item Comment count - the number of comments for this bug
-\item Number of comenters - the number of distinct people participating in the discussion about the bug
+\item Number of commenters - the number of distinct people participating in the discussion about the bug
 \item How long it took the solve the bug - by subtracting the close date from the open date
 \end{itemize}
 
@@ -79,6 +79,22 @@ Our tool of choice was Rapid Miner because ...
 
 \subsection{Classification of bugs by component} % (fold)
 \label{sub:Classification of bugs bugs by component}
+
+When a bug report is submitted, someone has to look at it and determine which component it affects and assigned an appropriate label. Currently it is done manually by one of the maintainers. We wondered if it's possible to use data mining to automatically classify new bugs by component.
+
+We came to the conclusion that only title and description should be used to determine the component since they describe the bug but other properties are just metadata. The outcome of the classifier should be the component name that this bug affects.
+
+Only the bugs which already had a component label assigned to them were chosen as the training data for data mining because the bugs with a component assigned to them are already classified and we didn't have to do it manually.
+
+Title and description values were transformed into lower case and then tokenized using non letters as delimiters and then word vectors were generated from them using TF-IDF. It's worth pointing out that if a more sophisticated tokenization algorithm was used, perhaps it would significantly improve the accuracy of classifiers.
+
+After the data was pre-processed, we chose various classifying algorithms that were learned about in class and compared their accuracy. Accuracy is used to assess the performance of classifiers. It was mentioned in the lectures that a stratified 10-fold cross validation is recommended for estimating accuracy. Because we wanted to try out various algorithms and compare them, we only used a sample of data because it would take too much time to the classifiers to run on our desktop computers.
+
+Type             Algorithm     Sample    Time    Accuracy
+Decision Trees   Weka J48       500      2:19      44.80%
+Decision Trees   Weka J48      1000     10:25      45.50%
+Decision Trees   Weka LAD-Tree  500       
+
 % subsection Classification of bugs bugs by component (end)
 
 \subsection{Classification of bugs by developer} % (fold)
