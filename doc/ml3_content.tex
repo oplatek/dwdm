@@ -45,11 +45,11 @@ Component and owner are later manually assigned by one of the administrators. St
 
 The bug database which was provided as a single XML file was converted to a CSV file using a manually written script which contains all bug properties, previously mentioned aggregated properties but doesn't contain any of the comments.
 
-This CSV file was later imported in the data mining software package that we used and each property was assigned a type as seen in the screenshot below. In this particular case shown in the screenshot, *Component* was selected as the label or class for classification.
+This CSV file was later imported in the data mining software package that we used and each property was assigned a type as seen in the screenshot below. In this particular case shown in the screenshot, {\it Component} was selected as the label or class for classification.
 
-*s1\_types.png*
+%\includegraphics{s1-types} %todo convert from jpg to eps
 
-Properties of type *text* will be later converted to vectors using the text processing features of the data mining software package.
+Properties of type {\it text} will be later converted to vectors using the text processing features of the data mining software package.
 
 % subsection Processing of the data (end)
 
@@ -57,18 +57,31 @@ Properties of type *text* will be later converted to vectors using the text proc
 
 \section{Tools} % (fold)
 \label{sub:Tools}
+We have used two open source data mining tools Weka and Rapid Miner.
+Weka is tool which we both know from Computational linguistic course and its GUI can be used
+for simple data or text mining tasks. Unfortunately, Weka GUI requires a lot of memory and contain a few bugs, 
+which can be reduced by using command line interface.
+
+On the other hand, Rapid Miner interface is very user friendly and it wraps a far more 
+implementation of data mining algorithms than Weka. In fact, it contains Weka.
 
 \subsection{Weka} % (fold)
 \label{sub:Weka}
 
-At first we used the tool Weka to familiarise ourselves with ....
+At first we used the tool Weka to familiarise ourselves with data mining algorithms.
+It's main advantage compared to Rapid Miner is command line interface, where commands can be simply copied and pasted.
+On contrary, the CLI is very confusing and iterative process of selecting correct arguments in data mining is really exhausting due to a large amount of processed data.
 
+\input{ml3_steps}
 % subsection Weka (end)
 
 \subsection{Rapid Miner} % (fold)
 \label{sub:Rapid Miner}
 
 Our tool of choice was Rapid Miner because ...
+simple and nice interface
+no bugs
+presenting possibilities via diagrams, graphs, etc.
 
 % subsection Rapid Miner (end)
 
@@ -90,10 +103,16 @@ Title and description values were transformed into lower case and then tokenized
 
 After the data was pre-processed, we chose various classifying algorithms that were learned about in class and compared their accuracy. Accuracy is used to assess the performance of classifiers. It was mentioned in the lectures that a stratified 10-fold cross validation is recommended for estimating accuracy. Because we wanted to try out various algorithms and compare them, we only used a sample of data because it would take too much time to the classifiers to run on our desktop computers.
 
-Type             Algorithm     Sample    Time    Accuracy 
-Decision Trees   Weka J48       500      2:19      44.80%
-Decision Trees   Weka J48      1000     10:25      45.50%
-Decision Trees   Weka LAD-Tree  500       
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Type     &       Algorithm   & Sample &  Time &  Accuracy   \\
+\hline
+\hline
+Decision Trees   Weka J48    &  500  &   2:19 &    44.80\%  \\
+Decision Trees   Weka J48    & 1000  &  10:25 &    45.50\%  \\
+Decision Trees   Weka LAD-Tree &  500  &        &           \\
+\hline
+\end{tabular}
 
 % subsection Classification of bugs bugs by component (end)
 
@@ -105,10 +124,17 @@ Decision Trees   Weka LAD-Tree  500
 
 \section{Prediction} % (fold)
 \label{sub:Prediction}
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
 Type             Algorithm         Sample    Time    Accuracy
-neural network 2 layers (100,100)  50        17:54   172.611 MSE 
-polynomial regression              50        5:16    159974516.535  MSE  -> does not have shape of polynom
-polynomial regression              500       6:23:16   2620470.535  MSE  -> does not have shape of polynom
+\hline
+\hline
+neural network 2 layers (100,100)  & 50     &  17:54 & 172.611 MSE \\
+polynomial regression              & 50     &  5:16  & 159974516.535  MSE  -> does not have shape of polynom\\
+polynomial regression              & 500    &  6:23:16 & 2620470.535  MSE  -> does not have shape of polynom\\
+\hline
+\end{tabular}
 
 
 \subsection{Prediction of bug lifespan} % (fold)

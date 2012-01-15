@@ -34,7 +34,9 @@ namespace Dwdm
                             Component = bug.Element("component").Value.Trim() != "" ? bug.Element("component").Value : "null",
                             Stars = int.Parse(bug.Element("stars").Value),
                             Description = bug.Element("description").Value,
-                            Comments = bug.Descendants("comment").Count()
+                            Comments = bug.Descendants("comment").Count(),
+                            closedOn = bug.Element("closedOn").Value,
+                            openedDate = bug.Element("openedDate").Value
                         });
 
             using (StreamWriter sw = new StreamWriter(target))
@@ -50,22 +52,28 @@ namespace Dwdm
                 sw.WriteLine("@attribute bug-description string");
                 sw.WriteLine("@attribute bug-owner {" + string.Join(", ", bugs.Select(b => b.Owner).Distinct()) + "}");
                 sw.WriteLine("@attribute bug-component {" + string.Join(", ", bugs.Select(b => b.Component).Distinct()) + "}");
+                sw.WriteLine("@attribute bug-duration numeric");
                 sw.WriteLine();
                 sw.WriteLine("@data");
 
-                foreach (var bug in bugs.Where(b => b.Priority != "" && b.Type != "" && !b.Title.EndsWith("\\") && !b.Description.EndsWith("\\") && b.Component != "null" ))
+                foreach (var bug in bugs.Where(b => b.Priority != "" && b.Type != "" && !b.Title.EndsWith("\\") && !b.Description.EndsWith("\\") && b.closedOn != "null"))
                 {
+                    DateTime clTime = DateTime.Parse(bug.closedOn);
+                    DateTime opTime = DateTime.Parse(bug.openedDate);
+                    TimeSpan duration = clTime.Subtract(opTime);
                     sw.WriteLine(string.Format(
-                        "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}",
-                        //"{0},{1}",
-//                        "{0},{1},{2},{3},{4},{5},{6},{7}",
+                        "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}",
                         bug.ID, 
                         "'" + bug.Title.Replace("'", @"\'").Replace("\n", " ") + "'",
-                        bug.Status, bug.Type, bug.Priority, 
-                        bug.Stars, bug.Comments,
+                        bug.Status, 
+                        bug.Type, 
+                        bug.Priority, 
+                        bug.Stars, 
+                        bug.Comments,
                         "'" + bug.Description.Replace("'", @"\'").Replace("\n", " ") + "'",
                         bug.Owner,
-                        bug.Component 
+                        bug.Component != "null" ? bug.Component : "null",
+                        duration.Days
 					));
                 }
             }
