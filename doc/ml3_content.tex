@@ -90,7 +90,7 @@ Title and description values were transformed into lower case and then tokenized
 
 After the data was pre-processed, we chose various classifying algorithms that were learned about in class and compared their accuracy. Accuracy is used to assess the performance of classifiers. It was mentioned in the lectures that a stratified 10-fold cross validation is recommended for estimating accuracy. Because we wanted to try out various algorithms and compare them, we only used a sample of data because it would take too much time to the classifiers to run on our desktop computers.
 
-Type             Algorithm     Sample    Time    Accuracy
+Type             Algorithm     Sample    Time    Accuracy 
 Decision Trees   Weka J48       500      2:19      44.80%
 Decision Trees   Weka J48      1000     10:25      45.50%
 Decision Trees   Weka LAD-Tree  500       
@@ -106,7 +106,10 @@ Decision Trees   Weka LAD-Tree  500
 \section{Prediction} % (fold)
 \label{sub:Prediction}
 Type             Algorithm         Sample    Time    Accuracy
-neural network 2 layers (100,100)  500       17:14   172.611 MSE (maximum)
+neural network 2 layers (100,100)  50        17:54   172.611 MSE 
+polynomial regression              50        5:16    159974516.535  MSE  -> does not have shape of polynom
+polynomial regression              500       6:23:16   2620470.535  MSE  -> does not have shape of polynom
+
 
 \subsection{Prediction of bug lifespan} % (fold)
 \label{sub:Prediction of bug lifespan}
