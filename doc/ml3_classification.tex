@@ -21,7 +21,8 @@ The graphical representation of the processes of this data mining task can be se
 \end{figure}
 
 Obtained results are displayed in the following table. Type is the class of algorithms, algorithm is a specific classification algorithm (Weka means that it wasn't a Rapid Miner implementation of the algorithm), sample is the number of classified bugs used, time is how long it took to run, accuracy is the stratified 10-fold cross validation result. Starred times indicate that they were run on a different computer.
-
+\\
+\\
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 Type     &       Algorithm    & Sample Size &  Time &  Accuracy   \\
@@ -63,9 +64,10 @@ Lazy Classifiers & k-NN (k=60) &   500  &   0:08  &    42.20\%  \\
 
 Support Vector Classifiers & Weka SMO &   500  &  0:53  &    41.40\%  \\
                                      &&  1000  &  4:15  &    47.20\%  \\
-
 \hline
 \end{tabular}
+\\
+\\
 
 {\bf Conclusion.} As can be seen, it is possible to automatically classify bugs by their content more than half of the time. Most of the trialed algorithms could easily reach the 40\% accuracy barrier, however, the performance between these algorithms varies. While decision trees provide an acceptable although below average accuracy compared to all other algorithms, their performance is very poor. Bayes Network was the first algorithm to cross the 50\% line but it was beaten by k-NN which not only performs much faster but also gives the best accuracy. Therefore the k-NN algorithm was chosen to be run on the whole dataset to find out the best possible accuracy. It was mentioned in the lectures that the k-value should be in tens which clearly holds true in our experiments.
 
