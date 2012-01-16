@@ -7,7 +7,7 @@
 
 {\bf Training data and classes.} We need training data which should already be classified. Only the bugs which already had a component label assigned to them were chosen as the training data for data mining because the bugs with a component assigned to them are already classified and we didn't have to do it manually. There are about 10 different components used in the data, for example, Dalvik, System, Browser, Applications.
 
-{\bf Text processing.} Classification algorithms can only work with numbers, not text, so it was necessary to preprocess text and convert it to vectors that algorithms can understand. Title and description values were transformed into lower case and then tokenized using non letters as delimiters and then word vectors were generated from them using TF-IDF (term frequency–inverse document frequency - used to evaluate how important a word is to a document in a collection or corpus). Each word then became an attribute with the TF-IDF value. It's worth pointing out that if a more sophisticated tokenization algorithm was used which could recognize Java code snippets and tokenize namespaces, class names, method names etc., perhaps it would significantly improve the accuracy of classifiers.
+{\bf Text processing.} Classification algorithms can only work with numbers, not text, so it was necessary to preprocess text and convert it to vectors that algorithms can understand. Title and description values were transformed into lower case and then tokenized using non letters as delimiters and then word vectors were generated from them using TF-IDF (term frequency–inverse document frequency - used to evaluate how important a word is to a document in a collection or corpus). Each word then became an attribute with the TF-IDF value. Other vector creation schemas were trialed (term frequency, term occurences) but they showed poor results and it was concluded that TF-IDF is the best choice. It's worth pointing out that if a more sophisticated tokenization algorithm was used which could recognize Java code snippets and tokenize namespaces, class names, method names etc., perhaps it would significantly improve the accuracy of classifiers.
 
 {\bf Performance.} After the data was pre-processed, we chose various classifying algorithms that were learned about in class and compared their accuracy. Accuracy is used to assess the performance of classifiers. It was mentioned in the lectures that a stratified 10-fold cross validation is recommended for estimating accuracy. Because we wanted to try out various algorithms and compare them, we only used a sample of data because it would take too much time to the classifiers to run on our desktop computers.\newline
 
@@ -40,7 +40,7 @@ Bayes Classifiers & Naive Bayes &  4000  &   2:53  &    43.32\%  \\
 Bayes Classifiers & Bayes Network &   500  &  0:18  &   40.60\%  \\
 Bayes Classifiers & Bayes Network &  1000  &  1:11  &   42.50\%  \\
 Bayes Classifiers & Bayes Network &  2000  &  4:06  &   50.05\%  \\
-Bayes Classifiers & Bayes Network &  4000  &    &   \%  \\
+Bayes Classifiers & Bayes Network &  4000  & 43:41* &   54.45\%  \\
 
 Lazy Classifiers & k-NN (k=1) &   500  &   0:09  &    41.60\%  \\
 Lazy Classifiers & k-NN (k=1) &  1000  &   0:39  &    40.80\%  \\
