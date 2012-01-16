@@ -10,8 +10,9 @@
 {\bf Text processing.} Text processing was done exactly like described in the previous section.
 
 {\bf Performance.} Error rates are used to estimate accuracy of predictors. We are using a small sample size and only 3-fold stratified cross validation because the predictors take a long time to run. Error rates are given in milliseconds as the root of mean squared error.
-
-\begin{tabular}{|c|c|c}
+\\
+\\
+\begin{tabular}{|c|c|p{8cm}|}
 \hline
  Algorithm    & Sample Size &  Error Rate   \\
 \hline
@@ -20,9 +21,10 @@ Linear Regression     &  50 & 15809561072.876 (183 days) +/- 1913382829.648 (22 
                       &  80 &  23016235402.190 (266 days) +/- 9169804778.729 (106 days) \\
 Polynomial Regression &  50 &  12954847042.251 (150 days) +/- 5225235366.410 (60.5 days) \\
                       &  80 &  15726486894.414 (182 days) +/- 8349272014.051 (97 days) \\
-
 \hline
 \end{tabular}
+\\
+\\
 
 {\bf Conclusion.} It took a lot of time for these data mining tasks to run so we were able to test them only on a small sample size. The obtained results were not very convincing nor useful.
 

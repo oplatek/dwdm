@@ -25,11 +25,11 @@ It is also possible to aggregate the comments for a bug to determine additional 
 
 \begin{itemize}
 \item Comment count - the number of comments for this bug
-\item Number of commenters - the number of distinct people participating in the discussion about the bug
+\item Number of commentators - the number of distinct people participating in the discussion about the bug
 \item How long it took the solve the bug - by subtracting the close date from the open date
 \end{itemize}
 
-Title, description, type are entered by the user. System also automatically generated the bug id, marks it as a new bug, assigns a medium priority to the bug, makes the user as the reporter of the bug and sets the opened date to the date and time of the submition.
+Title, description and type are entered by the user. System also automatically generates the bug id, marks it as a new bug, assigns a medium priority to the bug, makes the user as the reporter of the bug and sets the opened date to the date and time of the submission.
 
 Component and owner are later manually assigned by one of the administrators. Status, priority can later be changed, however, these changes are not reflected in the available data, only the latest state of the bug is available.
 % subsection Description of the data (end)
@@ -42,7 +42,7 @@ This CSV file was later imported in the data mining software that we used and ea
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.5]{ml3_data_types}
+\includegraphics[scale=0.8]{ml3_data_types}
 \caption{Defined types for imported data in Rapid Miner}
 \end{center}
 \end{figure}
