@@ -3,15 +3,21 @@ In following section we present results obtain by running experiments with Rapid
 \subsection{Classification of bugs by component} % (fold)
 \label{sub:Classification of bugs bugs by component}
 
-When a bug report is submitted, someone has to look at it and determine which component it affects and assigned an appropriate label. Currently it is done manually by one of the maintainers. We wondered if it's possible to use data mining to automatically classify new bugs by component.
+{\bf Task.} When a bug report is submitted, someone has to look at it and determine which component it affects and assigned an appropriate label. Currently it is done manually by one of the maintainers. We wondered if it's possible to use data mining to automatically classify new bugs by component.
 
-We came to the conclusion that only title and description should be used to determine the component since they describe the bug but other properties are just metadata. The outcome of the classifier should be the component name that this bug affects.
+{\bf Attributes used.} After inspecting the available data, we came to the conclusion that only title and description should be used to determine the component since they describe the bug but other properties are just metadata. The outcome of the classifier should be the component name that this bug affects.
 
-Only the bugs which already had a component label assigned to them were chosen as the training data for data mining because the bugs with a component assigned to them are already classified and we didn't have to do it manually.
+{\bf Training data and classes.} Only the bugs which already had a component label assigned to them were chosen as the training data for data mining because the bugs with a component assigned to them are already classified and we didn't have to do it manually. All possible component names were listed in the data description section.
 
-Title and description values were transformed into lower case and then tokenized using non letters as delimiters and then word vectors were generated from them using TF-IDF. It's worth pointing out that if a more sophisticated tokenization algorithm was used, perhaps it would significantly improve the accuracy of classifiers.
+{\bf Text processing.} Title and description values were transformed into lower case and then tokenized using non letters as delimiters and then word vectors were generated from them using TF-IDF. It's worth pointing out that if a more sophisticated tokenization algorithm was used, perhaps it would significantly improve the accuracy of classifiers.
 
-After the data was pre-processed, we chose various classifying algorithms that were learned about in class and compared their accuracy. Accuracy is used to assess the performance of classifiers. It was mentioned in the lectures that a stratified 10-fold cross validation is recommended for estimating accuracy. Because we wanted to try out various algorithms and compare them, we only used a sample of data because it would take too much time to the classifiers to run on our desktop computers.
+{\bf Performance.} After the data was pre-processed, we chose various classifying algorithms that were learned about in class and compared their accuracy. Accuracy is used to assess the performance of classifiers. It was mentioned in the lectures that a stratified 10-fold cross validation is recommended for estimating accuracy. Because we wanted to try out various algorithms and compare them, we only used a sample of data because it would take too much time to the classifiers to run on our desktop computers.\newline
+
+The graphical representation of the processes of this data mining task can be seen in the following screenshot of Rapid Miner.
+
+*screenshot of rapid miner*
+
+Obtained results are displayed in the following table.
 
 \begin{tabular}{|c|c|c|c|c|}
 \hline
@@ -25,10 +31,6 @@ Decision Trees & Weka LAD-Tree &  500  &        &           \\
 \end{tabular}
 
 % subsection Classification of bugs bugs by component (end)
-
-\subsection{Classification of bugs by developer} % (fold)
-\label{sub:Classification of bugs bugs by developer}
-% subsection Classification of bugs bugs by developer (end)
 
 % section Classification (end)
 
