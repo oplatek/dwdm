@@ -1,6 +1,5 @@
-\section{Data} % (fold)
-\label{sub:Data}
-We chose to mine the Android bug database because it was the data was already provided by the organizers of the MSR 2012 challange. More specifically, we chose to focus on the bug reports in this database as we believe it is the most important part of the entire database and it should give the most interesting results. The database contains 20169 reported bugs (up to December 3, 2011). 
+
+We chose to mine the Android bug database because the data was already provided by the organizers of the MSR 2012 challange. More specifically, we chose to focus on the bug reports in this database as we believe it is the most important part of the entire database and it should give the most interesting results. The database contains 20169 reported bugs (up to December 3, 2011). 
 
 \subsection*{Description of the data} % (fold)
 \label{sub:Description of the data}
@@ -37,11 +36,16 @@ Component and owner are later manually assigned by one of the administrators. St
 
 \subsection*{Processing of the data} % (fold)
 
-The bug database which was provided as a single XML file was converted to a CSV file using a manually written script which contains all bug properties, previously mentioned aggregated properties but doesn't contain any of the comments.
+The bug database which was provided as a single XML file was converted to a CSV file using a manually written script which contains all bug properties, previously mentioned aggregated properties but doesn't contain any of the bug comments.
 
-This CSV file was later imported in the data mining software package that we used and each property was assigned a type as seen in the screenshot below. In this particular case shown in the screenshot, {\it Component} was selected as the label or class for classification.
+This CSV file was later imported in the data mining software that we used and each property was assigned a type as seen in the screenshot below.
 
-%\includegraphics{s1-types} %todo convert from jpg to eps
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.5]{ml3_data_types}
+\caption{Defined types for imported data in Rapid Miner}
+\end{center}
+\end{figure}
 
-Properties of type {\it text} will be later converted to vectors using the text processing features of the data mining software package.
-% subsection Processing of the data (end)
+Properties of type {\it text} will be later converted to vectors using the text processing features of the data mining software.
+

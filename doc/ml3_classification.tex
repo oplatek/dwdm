@@ -1,5 +1,3 @@
-In following section we present results obtain by running experiments with Rapid Miner software. Almost identical experiments we firstly run with Weka are described in Appendix~\ref{cha:Weka}. Note that Weka experiments were running on much slower computer, so the running times are longer. 
-
 \subsection{Classification of bugs by component} % (fold)
 \label{sub:Classification of bugs bugs by component}
 
@@ -15,9 +13,14 @@ In following section we present results obtain by running experiments with Rapid
 
 The graphical representation of the processes of this data mining task can be seen in the following screenshot of Rapid Miner.
 
-*screenshot of rapid miner*
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.5]{ml3_classification_component_rapidminer}
+\caption{Workflow in Rapid Miner: 1. Load data 2. Select attributes 3. Use only labeled data 4. Use a sample 5. Text processing 6. Cross Validation}
+\end{center}
+\end{figure}
 
-Obtained results are displayed in the following table. Type is the class of algorithms, algorithm is a specific classification algorithm (Weka means that it wasn't a Rapid Miner implementation of the algorithm), sample is the number of classified bugs used, time is how long it took to run, accuracy is the stratified 10-fold cross validation result.
+Obtained results are displayed in the following table. Type is the class of algorithms, algorithm is a specific classification algorithm (Weka means that it wasn't a Rapid Miner implementation of the algorithm), sample is the number of classified bugs used, time is how long it took to run, accuracy is the stratified 10-fold cross validation result. Starred times indicate that they were run on a different computer.
 
 \begin{tabular}{|c|c|c|c|c|}
 \hline
@@ -42,30 +45,30 @@ Bayes Classifiers & Bayes Network &  4000  &    &   \%  \\
 Lazy Classifiers & k-NN (k=1) &   500  &   0:09  &    41.60\%  \\
 Lazy Classifiers & k-NN (k=1) &  1000  &   0:39  &    40.80\%  \\
 Lazy Classifiers & k-NN (k=1) &  2000  &   3:08  &    46.65\%  \\
-Lazy Classifiers & k-NN (k=1) &  4000  &     &   \%  \\
+Lazy Classifiers & k-NN (k=1) &  4000  &  11:14* &    49.07\%  \\
 
 Lazy Classifiers & k-NN (k=15) &   500  &   0:11  &    45.40\%  \\
 Lazy Classifiers & k-NN (k=15) &  1000  &   0:38  &    49.80\%  \\
 Lazy Classifiers & k-NN (k=15) &  2000  &   3:13  &    55.60\%  \\
-Lazy Classifiers & k-NN (k=15) &  4000  &     &    41.60\%  \\
+Lazy Classifiers & k-NN (k=15) &  4000  &  11:18* &    58.02\%  \\
 
 Lazy Classifiers & k-NN (k=30) &   500  &   0:10  &    45.00\%  \\
 Lazy Classifiers & k-NN (k=30) &  1000  &   0:35  &    49.20\%  \\
 Lazy Classifiers & k-NN (k=30) &  2000  &   3:01  &    54.60\%  \\
-Lazy Classifiers & k-NN (k=30) &  4000  &     &    \%  \\
+Lazy Classifiers & k-NN (k=30) &  4000  &  11:15* &    57.98\%  \\
 
 Lazy Classifiers & k-NN (k=60) &   500  &   0:08  &    42.20\%  \\
 Lazy Classifiers & k-NN (k=60) &  1000  &   0:38  &    46.70\%  \\
 Lazy Classifiers & k-NN (k=60) &  2000  &   3:29  &    52.50\%  \\
-Lazy Classifiers & k-NN (k=60) &  4000  &     &    \%  \\
+Lazy Classifiers & k-NN (k=60) &  4000  &  11:21* &    56.10\%  \\
 
-Functional Classifiers & SMO &   500  &  0:53  &    41.40\%  \\
-Functional Classifiers & SMO &  1000  &  4:15  &    47.20\%  \\
+Support Vector Classifiers & Weka SMO &   500  &  0:53  &    41.40\%  \\
+Support Vector Classifiers & Weka SMO &  1000  &  4:15  &    47.20\%  \\
 
 \hline
 \end{tabular}
 
-As can be seen, it is possible to automatically classify bugs by their content almost half of the time. Most of the trialed algorithms could easily reach the 40\% accuracy barrier, however, the performance between these algorithms varies. While decision trees provide an acceptable although below average accuracy compared to all other algorithms, their performance is very poor. Bayes Network was the first algorithm to cross the 50\% line but it was beaten by k-NN which not only performs much faster but also gives the best accuracy. Therefore the k-NN algorithm was chosen to be run on the whole dataset to find out the best possible accuracy.
+As can be seen, it is possible to automatically classify bugs by their content more than half of the time. Most of the trialed algorithms could easily reach the 40\% accuracy barrier, however, the performance between these algorithms varies. While decision trees provide an acceptable although below average accuracy compared to all other algorithms, their performance is very poor. Bayes Network was the first algorithm to cross the 50\% line but it was beaten by k-NN which not only performs much faster but also gives the best accuracy. Therefore the k-NN algorithm was chosen to be run on the whole dataset to find out the best possible accuracy.
 
 % subsection Classification of bugs bugs by component (end)
 
