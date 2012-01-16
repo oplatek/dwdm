@@ -2,12 +2,12 @@
 \label{sub:Prediction of bug lifespan}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-Type             Algorithm         Sample    Time    Accuracy
+Type &Algorithm   &     Sample &  Time &  Accuracy (MSE)\\
 \hline
 \hline
-neural network 2 layers (100,100)  & 50     &  17:54 & 172.611 MSE \\
-polynomial regression              & 50     &  5:16  & 159974516.535  MSE  -> does not have polynomial shape \\
-polynomial regression              & 500    &  6:23:16 & 2620470.535  MSE  -> does not have polynomial shape\\
+Neural Network 2 layers (100,100) & Back Propagation  & 50     &  17:54 & 172.611 \\
+Regression & Polynomial Regression              & 50     &  5:16  & 159974516.535  \footnote{Huge MSE so it does not have polynomial shape}\\
+Regression & Polynomial Regression              & 500    &  6:23:16 & 2620470.535  \footnote{Huge MSE so it does not have polynomial shape}\\
 \hline
 \end{tabular}
 % subsection Prediction of bug lifespan (end)

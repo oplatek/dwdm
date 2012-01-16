@@ -1,15 +1,17 @@
-\subsection{Android bugs preprocessing for Weka} % (fold)
+\subsection*{Android bugs preprocessing for Weka} % (fold)
 \label{sub:Android bugs preprocessing for Weka}
 \begin{itemize}
     \item We created csv files
     \item We ran unsuccessfully command
 \begin{lstlisting}[language=sh]
-$ java weka.core.converters.CSVLoader ANDROID_PLATFORM_BUGS.csv > ANDROID_PLATFORM_BUGS.arff
+$ java weka.core.converters.CSVLoader \
+    ANDROID_PLATFORM_BUGS.csv > ANDROID_PLATFORM_BUGS.arff
 \end{lstlisting}
     \item so we design our own script
     \item  We tried tried to convert strings attributes to vectors for 1000 most important words. Unfortunately, following command crashes.
 \begin{lstlisting}[language=sh]
-    java weka.filters.unsupervised.attribute.StringToWordVector -i android-platform-bugs.arff -o android_plat-bugs-Vectors.arff
+$ java weka.filters.unsupervised.attribute.StringToWordVector \
+    -i android-platform-bugs.arff -o android_plat-bugs-Vectors.arff
 \end{lstlisting}
     \item We found out that the script works if there only the string attributes so we generated
     {\it android-plat-strings.arff} and {\it android-plat-except-strings.arff}
@@ -39,21 +41,31 @@ cat mixed-head without-prefix > android-plat-bugs2vectors.arff
     \item At the end we can ran a Weka command for training, testing and validating one of data mining algorithms 
 \end{itemize}
 
-\subsubsection{Weka data mining algorithms} % (fold)
+\subsubsection*{Weka data mining algorithms} % (fold)
 \label{ssub:Weka datamining algorithms}
 
 In our first experiment we tried to use Support Vector Machines(SMO) and Decision Trees to guess {\it Component} attribute.  {\it Component} attribute is a nominal attribute and define in which part of Android the bug was discovered. Possible values are {\it Browser}, {\it Dalvik}, {\it Framewok}, etc.
 
 As we mentioned before, we generated the command via Weka {\it Explorer} GUI application and for validating we have chosen 10 fold cross validation, because it's standard validation method.
 \begin{lstlisting}[language=sh]
-    java weka.classifiers.functions.SMO -C 1.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K "weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0" -t sample-vectorised.arff -c 7> smo.out
+$ java weka.classifiers.functions.SMO \
+ -C 1.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \
+ "weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0" \
+ -t sample-vectorised.arff -c 7> smo.out
 \end{lstlisting}
  We got precision of 79\% on sample containing 4000 items with following accuracy and confusion matrix.
     Actually, as you can see in the confusion matrix the results seems quite good because most of the misclassified samples are from category null.
    In the second table we compared the accuracy of the same algorithm with and without null values. 
-
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-a & b & c & d & e & f & g & h & i & j & k & l & m & n & o & p   &<-- classified as\\
+\\
+\\
+{\bf Confusion matrix}
+\\
+\\
+\begin{tabular}{|cccccccccccccccc|c|}
+\hline
+a & b & c & d & e & f & g & h & i & j & k & l & m & n & o & p   & classified as\\
+\hline
+\hline
 45 & 9 & 1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 &  a = Browser\\
 5&2138 & 34 & 52 & 19 & 0 & 9 & 10 & 9 & 15 & 3 & 0 & 1 & 0 & 0 & 0 &  b = null\\
 0 & 65 & 17 & 12 & 1 & 0 & 2 & 6 & 1 & 4 & 1 & 0 & 0 & 0 & 0 & 0 &  c = Framework\\
@@ -70,21 +82,30 @@ a & b & c & d & e & f & g & h & i & j & k & l & m & n & o & p   &<-- classified 
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 &  n = Market\\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 &  o = Android\\
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 &  p = Docs\\
+\hline
 \end{tabular}
+\\
+\\
 
 We reran the experiment without null values for target {\it Component} attribute. See difference below.
-
+\\
+\\
+{\bf Algorithms results}
+\\
+\\
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 Type     &       Algorithm   & Sample &  Time &  Accuracy   \\
 \hline
 \hline
-Decision Trees   Weka J48    & 4000  with nulls &   3:36:03 &    77,4\%  \\
-Decision Trees   Weka J48    & 4000  without nulls &  3:14:25  &    62,2\%  \\
-Support Vector Machines   Weka SMO    & 4000  with nulls &   43:03 &    79\%  \\
-Support Vector Machines   Weka SMO    & 4000  without nulls &  44:56 &    64.8\%  \\
+Decision Trees & Weka J48    & 4000  with nulls &   3:36:03 &    77,4\%  \\
+Decision Trees & Weka J48    & 4000  without nulls &  3:14:25  &    62,2\%  \\
+Support Vector Machines & Weka SMO    & 4000  with nulls &   43:03 &    79\%  \\
+Support Vector Machines & Weka SMO    & 4000  without nulls &  44:56 &    64.8\%  \\
 \hline
 \end{tabular}
+\\
+\\
 %=== Stratified cross-validation ===
 %
 %Correctly Classified Instances        3066               64.8203 %
@@ -117,23 +138,27 @@ Support Vector Machines   Weka SMO    & 4000  without nulls &  44:56 &    64.8\%
 %   0   0   0   0   1   0   0   0   0   0   0   0   0   0   0   0 |   o = Android
 %   0   0   0   0   0   0   0   0   0   0   0   0   1   0   0   0 |   p = Docs
 %
-\subsubsection{Classification of bugs by developer} % (fold)
+\subsubsection*{Classification of bugs by developer} % (fold)
 \label{sub:Classification of bugs bugs by developer}
     In Another experiment we tried to deduce which owner should care about the bug.
     At first we ran the experiment with null values and got following results of Stratified 10 folds cross-validation.
     In this experiment we used only {\it SMO}, because from our prior knowledge Support Vector Machines
     should perform better than Decision trees and we have at this point confirmed it using both Weka and Rapid Miner.
-
-    
+\\
+\\
+{\bf Experiment results}
+\\
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 Type     &       Algorithm   & Sample &  Time &  Accuracy   \\
 \hline
 \hline
-Support Vector Machines   Weka SMO    & 4000  with nulls &   58:23 &    77.9\%  \\
-Support Vector Machines   Weka SMO    & 4000  without nulls &  1:03:41 &    55.1\%  \\
+Support Vector Machines   & Weka SMO    & 4000  with nulls &   58:23 &    77.9\%  \\
+Support Vector Machines   & Weka SMO    & 4000  without nulls &  1:03:41 &    55.1\%  \\
 \hline
 \end{tabular}
+\\
+\\
 
 %\begin{tabular}{|c|c|}
 %Kappa statistic                &         0.5353\\
