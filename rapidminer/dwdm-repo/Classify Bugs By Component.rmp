@@ -112,21 +112,27 @@
             <list key="columns"/>
             <parameter key="replenishment_value" value="null"/>
           </operator>
-          <operator activated="true" class="neural_net" compatibility="5.1.017" expanded="true" height="76" name="Neural Net" width="90" x="133" y="96">
-            <list key="hidden_layers"/>
-            <parameter key="training_cycles" value="500"/>
-            <parameter key="learning_rate" value="0.3"/>
-            <parameter key="momentum" value="0.2"/>
-            <parameter key="decay" value="false"/>
-            <parameter key="shuffle" value="true"/>
-            <parameter key="normalize" value="true"/>
-            <parameter key="error_epsilon" value="1.0E-5"/>
-            <parameter key="use_local_random_seed" value="false"/>
-            <parameter key="local_random_seed" value="1992"/>
+          <operator activated="true" class="k_nn" compatibility="5.1.017" expanded="true" height="76" name="k-NN" width="90" x="254" y="70">
+            <parameter key="k" value="15"/>
+            <parameter key="weighted_vote" value="false"/>
+            <parameter key="measure_types" value="MixedMeasures"/>
+            <parameter key="mixed_measure" value="MixedEuclideanDistance"/>
+            <parameter key="nominal_measure" value="NominalDistance"/>
+            <parameter key="numerical_measure" value="EuclideanDistance"/>
+            <parameter key="divergence" value="GeneralizedIDivergence"/>
+            <parameter key="kernel_type" value="radial"/>
+            <parameter key="kernel_gamma" value="1.0"/>
+            <parameter key="kernel_sigma1" value="1.0"/>
+            <parameter key="kernel_sigma2" value="0.0"/>
+            <parameter key="kernel_sigma3" value="2.0"/>
+            <parameter key="kernel_degree" value="3.0"/>
+            <parameter key="kernel_shift" value="1.0"/>
+            <parameter key="kernel_a" value="1.0"/>
+            <parameter key="kernel_b" value="0.0"/>
           </operator>
           <connect from_port="training" to_op="Replace Missing Values" to_port="example set input"/>
-          <connect from_op="Replace Missing Values" from_port="example set output" to_op="Neural Net" to_port="training set"/>
-          <connect from_op="Neural Net" from_port="model" to_port="model"/>
+          <connect from_op="Replace Missing Values" from_port="example set output" to_op="k-NN" to_port="training set"/>
+          <connect from_op="k-NN" from_port="model" to_port="model"/>
           <portSpacing port="source_training" spacing="0"/>
           <portSpacing port="sink_model" spacing="0"/>
           <portSpacing port="sink_through 1" spacing="0"/>
